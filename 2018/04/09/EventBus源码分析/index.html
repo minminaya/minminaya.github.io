@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2018 | Hexo</title>
+  <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。 EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至改进轮子都有令人窒息的好处。  这张是EventBus官网档下来的哈哈哈哈哈！ 很明显啦，Event">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/2018/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/04/09/EventBus源码分析/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。 EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至改进轮子都有令人窒息的好处。  这张是EventBus官网档下来的哈哈哈哈哈！ 很明显啦，Event">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3515789-8193ca0b3fd0d578.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3515789-108c18b81e28d566.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3515789-c6eed382d2b7ccb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-04-08T09:17:18.006Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。 EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至改进轮子都有令人窒息的好处。  这张是EventBus官网档下来的哈哈哈哈哈！ 很明显啦，Event">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/3515789-8193ca0b3fd0d578.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -158,43 +166,204 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-EventBus源码分析" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
       
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/04/09/EventBus源码分析/" class="archive-article-date">
-  	<time datetime="2018-04-09T04:29:15.099Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-09</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+        <p>好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。</p>
+<p>EventBus的使用相信大家都使的贼溜了。实在不行看<a href="http://greenrobot.org/eventbus/" target="_blank" rel="noopener">文档</a>嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至改进轮子都有令人窒息的好处。<br><img src="http://upload-images.jianshu.io/upload_images/3515789-8193ca0b3fd0d578.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<hr>
+<p>这张是EventBus官网档下来的哈哈哈哈哈！</p>
+<p>很明显啦，EventBus用的观察者模式，Publisher作为事件发布者（被观察者）把Event发布到中转服务站EventBus，EventBus把Event传给Subscriber事件订阅者（观察者）并且唤醒了它。<br><img src="http://upload-images.jianshu.io/upload_images/3515789-108c18b81e28d566.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<hr>
+<h2 id="一-EventBus结构"><a href="#一-EventBus结构" class="headerlink" title="一. EventBus结构"></a>一. EventBus结构</h2><p>根据EventBus源码，其架构可以分为5个部分</p>
+<ol>
+<li>构造方法</li>
+<li>订阅者注册</li>
+<li>发送事件</li>
+<li>根据不同线程参数等处理事件（用反射运行目标方法）</li>
+<li>订阅者取消注册</li>
+</ol>
+<hr>
+<h4 id="1-构造方法"><a href="#1-构造方法" class="headerlink" title="1. 构造方法"></a>1. 构造方法</h4><p>EventBus注册的入口是<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```getDefault()```方法如下</span><br></pre></td></tr></table></figure></p>
+<p> static volatile EventBus defaultInstance;</p>
+<p> public static EventBus getDefault() {<br>        EventBus instance = defaultInstance;<br>        if (instance == null) {<br>            synchronized (EventBus.class) {<br>                instance = EventBus.defaultInstance;<br>                if (instance == null) {<br>                    instance = EventBus.defaultInstance = new EventBus();<br>                }<br>            }<br>        }<br>        return instance;<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里用了双重检查模式的单例模式。并且这里很高明的使用volatile 避免的指令重排序引起 未被完全初始化的问题。</span><br><span class="line">什么？不懂重排序?</span><br><span class="line">没事，重排序其实通俗的讲就是虚拟机为了优化指令，提高程序运行效率搞的东西。或者这么说，本来1,2,3三条指令按顺序运行，重排序之后那可能会变成1,3,2。这样会影响某些对象的初始化问题。</span><br><span class="line"></span><br><span class="line">虽然效率双重检查模式会有一定影响运行效率，但是对同步代码天大的好处。</span><br><span class="line"></span><br><span class="line">回头来，```EventBus()的构造方法</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">private static final EventBusBuilder DEFAULT_BUILDER = new EventBusBuilder();</span><br><span class="line">public EventBus() &#123;</span><br><span class="line">        this(DEFAULT_BUILDER);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p> 这货，搞了个独生子EventBusBuilder()，让它全权代理各参数以及配置的存储（其实也就是设计模式中的Builder模式）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">EventBus(EventBusBuilder builder) &#123;</span><br><span class="line">        logger = builder.getLogger();</span><br><span class="line">        subscriptionsByEventType = new HashMap&lt;&gt;();</span><br><span class="line">        typesBySubscriber = new HashMap&lt;&gt;();</span><br><span class="line">        stickyEvents = new ConcurrentHashMap&lt;&gt;();</span><br><span class="line">        ...省略一大堆妃子.....</span><br><span class="line">        eventInheritance = builder.eventInheritance;</span><br><span class="line">        executorService = builder.executorService;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="2-订阅者注册"><a href="#2-订阅者注册" class="headerlink" title="2. 订阅者注册"></a>2. 订阅者注册</h4><p>接着到了register()方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public void register(Object subscriber) &#123;</span><br><span class="line">        Class&lt;?&gt; subscriberClass = subscriber.getClass();</span><br><span class="line">        List&lt;SubscriberMethod&gt; subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriberClass);</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            for (SubscriberMethod subscriberMethod : subscriberMethods) &#123;</span><br><span class="line">                subscribe(subscriber, subscriberMethod);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这里有俩个地方很关键，一个是<figure class="highlight plain"><figcaption><span>findSubscriberMethods()方法```还有一个是```2. subscribe()方法```，他们一个是为了找到订阅方法，一个是用来注册订阅方法。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1方法是为了找到订阅者传进来的所有订阅方法，当然里面还挺复杂的，还写了判断有没有缓存来提高效率。</span><br><span class="line"></span><br><span class="line">```findSubscriberMethods()```中用了```findUsingInfo()```方法来获取订阅者的各种信息，并且进而调用了```findUsingReflectionInSingleClass()```来反射获取订阅者中的方法还有将他们保存到findState里面。</span><br><span class="line"></span><br><span class="line">**总结起来1方法也就是找到所有订阅方法，保存订阅方法信息到```findState```**</span><br><span class="line"></span><br><span class="line">**2方法是为了注册所有的订阅方法，当然还有粘性事件的处理**，解析可以看下注释</span><br></pre></td></tr></table></figure></p>
+<p> private void subscribe(Object subscriber, SubscriberMethod subscriberMethod) {<br>        Class&lt;?&gt; eventType = subscriberMethod.eventType;<br>        //根据订阅者和订阅对象创建订阅对象<br>        Subscription newSubscription = new Subscription(subscriber, subscriberMethod);<br>        //根据事件类型获取订阅对象集合<br>        CopyOnWriteArrayList<subscription> subscriptions = subscriptionsByEventType.get(eventType);<br>       ….<br>        int size = subscriptions.size();<br>        for (int i = 0; i &lt;= size; i++) {<br>            if (i == size || subscriberMethod.priority &gt; subscriptions.get(i).subscriberMethod.priority) {<br>                //根据订阅方法的优先级插入到订阅对象集合中，注册订阅方法<br>                subscriptions.add(i, newSubscription);<br>                break;<br>            }<br>        }</subscription></p>
+<pre><code>   .....
 
+    if (subscriberMethod.sticky) {
+        //如果是粘性事件
+        if (eventInheritance) {
+            Set&lt;Map.Entry&lt;Class&lt;?&gt;, Object&gt;&gt; entries = stickyEvents.entrySet();
+            for (Map.Entry&lt;Class&lt;?&gt;, Object&gt; entry : entries) {
+                Class&lt;?&gt; candidateEventType = entry.getKey();
+                if (eventType.isAssignableFrom(candidateEventType)) {
+                    Object stickyEvent = entry.getValue();
+                     //从上面stickyEvents集合中获取该类型的事件发送给当前订阅者。下面else里头也一样
+                     checkPostStickyEventToSubscription(newSubscription, stickyEvent);
+                }
+            }
+        } else {
+            Object stickyEvent = stickyEvents.get(eventType);
+            checkPostStickyEventToSubscription(newSubscription, stickyEvent);
+        }
+    }
+}
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里有点特别的地方就是，粘性事件的处理，如果是粘性事件，那么从粘性事件的集合中取出该事件发送到当前订阅者。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">#### 3. 发送事件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">这里从currentPostingThreadState对象中取出事件队列并且将当前需要的事件保存到队列中，然后处理队列中的所有事件，哦，同时移除操作的事件</span><br></pre></td></tr></table></figure>
+<p> public void post(Object event) {<br>        //事件队列和线程状态信息的Model类<br>        PostingThreadState postingState = currentPostingThreadState.get();<br>        //获取事件队列<br>        List<object> eventQueue = postingState.eventQueue;<br>        //将事件插入到队列中<br>        eventQueue.add(event);</object></p>
+<pre><code>    if (!postingState.isPosting) {
+        postingState.isMainThread = isMainThread();
+        postingState.isPosting = true;
+        if (postingState.canceled) {
+            throw new EventBusException(&quot;Internal error. Abort state was not reset&quot;);
+        }
+        try {
+            while (!eventQueue.isEmpty()) {  
+                //如果队列不是空的，那么让postSingleEvent()处理事件，并且移除该事件
+                postSingleEvent(eventQueue.remove(0), postingState);
+            }
+        } finally {
+            postingState.isPosting = false;
+            postingState.isMainThread = false;
+        }
+    }
+}
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">又回到```postSingleEvent()```方法里，从这里开始向下，又是一系列的对方法的查找的算法（向上查找事件的父类），结果是查找到所有的父类事件后存在List中，然后通过```postSingleEventForEventType(event, postingState, eventClass)```方法对各个事件分别处理，这里的函数名可以看出。。。。。</span><br><span class="line">这里处理的关键在于```postToSubscription(subscription, event, postingState.isMainThread);```中</span><br><span class="line"></span><br><span class="line">另外，假如是粘性事件，那么，</span><br><span class="line">从入口函数开始</span><br><span class="line"></span><br><span class="line">```EventBus.getDefault().postSticky(object);</span><br></pre></td></tr></table></figure>
+<p>它会把粘性事件的object放到下面这个Map里面</p>
+<figure class="highlight plain"><figcaption><span>final Map<class<?>, Object> stickyEvents;```</class<?></span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">便于第2步的```subscribe()```方法处理粘性事件</span><br><span class="line"></span><br><span class="line">#### 4. 根据不同线程参数等处理事件（用反射运行目标方法）</span><br><span class="line"></span><br><span class="line">从第3步的最后那里，可以知道事件给了```postToSubscription(subscription, event, postingState.isMainThread);```处理，这个方法很有意思，</span><br></pre></td></tr></table></figure>
+<p>private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) {<br>        switch (subscription.subscriberMethod.threadMode) {<br>            case POSTING:<br>                invokeSubscriber(subscription, event);<br>                break;<br>            case MAIN:<br>                if (isMainThread) {<br>                    invokeSubscriber(subscription, event);<br>                } else {<br>                    mainThreadPoster.enqueue(subscription, event);<br>                }<br>                break;<br>            case MAIN_ORDERED:<br>                if (mainThreadPoster != null) {<br>                    mainThreadPoster.enqueue(subscription, event);<br>                } else {<br>                    // temporary: technically not correct as poster not decoupled from subscriber<br>                    invokeSubscriber(subscription, event);<br>                }<br>                break;<br>            case BACKGROUND:<br>                if (isMainThread) {<br>                    backgroundPoster.enqueue(subscription, event);<br>                } else {<br>                    invokeSubscriber(subscription, event);<br>                }<br>                break;<br>            case ASYNC:<br>                asyncPoster.enqueue(subscription, event);<br>                break;<br>            default:<br>                throw new IllegalStateException(“Unknown thread mode: “ + subscription.subscriberMethod.threadMode);<br>        }<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">还记得使用EventBus定义处理事件的注解吗，也就是EventBus的4种线程模式，再看看上面的switch语句的处理，是不是遇到了父老乡亲，此处应该两眼泪汪汪。。</span><br><span class="line"></span><br><span class="line">这里根据不同的线程模式，来处理各个方法（反射执行方法），比如ThreadMode是MAIN，那么这里假如不是主线程的方法，则用Handler切换到主线程再执行。</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">#### 5. 订阅者取消注册</span><br><span class="line"></span><br><span class="line">取消注册那就是跟注册是相反的，大体原理一样，不过是变成了遍历取消注册</span><br></pre></td></tr></table></figure></p>
+<p>public synchronized void unregister(Object subscriber) {<br>        List&lt;Class&lt;?&gt;&gt; subscribedTypes = typesBySubscriber.get(subscriber);<br>        if (subscribedTypes != null) {<br>            for (Class&lt;?&gt; eventType : subscribedTypes) {<br>                unsubscribeByEventType(subscriber, eventType);<br>            }<br>            typesBySubscriber.remove(subscriber);<br>        } else {<br>            logger.log(Level.WARNING, “Subscriber to unregister was not registered before: “ + subscriber.getClass());<br>        }<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里最关键的地方在遍历函数里头的</span><br><span class="line"></span><br><span class="line">```unsubscribeByEventType(subscriber, eventType);</span><br></pre></td></tr></table></figure></p>
+<p>它是为了从订阅对象集合里面逐个逐个移除subscriber（订阅者）</p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我画了张思维导图，可能要放大才清楚咯</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/3515789-c6eed382d2b7ccb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="EventBus.png"></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/04/09/EventBus源码分析/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-  
-    </div></section>
+
   
 
-    
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
+  
+
+  
+
+  
+
+  
 
 
           </div>
@@ -217,8 +386,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
