@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="线程池与Android的日日夜夜假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。  正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机频繁的GC，假如说，一个请求所用的时间比创建销毁线程对象时间还短的话，那么时间将会大程度浪费在虚拟机">
+<meta property="og:type" content="website">
+<meta property="og:title" content="“new">
+<meta property="og:url" content="http://hexo.minminaya.cn/“new/index.html">
+<meta property="og:site_name" content="minminaya">
+<meta property="og:description" content="线程池与Android的日日夜夜假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。  正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机频繁的GC，假如说，一个请求所用的时间比创建销毁线程对象时间还短的话，那么时间将会大程度浪费在虚拟机">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-07c408015269c259.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-97604326567ecd92.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-b4a321c33910abec.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-82e987f0ca11a208.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-471b1c192a834240.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-2fae49209fbdea7a.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-83b471856880e85f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-04-18T19:22:57.467Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="“new">
+<meta name="twitter:description" content="线程池与Android的日日夜夜假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。  正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机频繁的GC，假如说，一个请求所用的时间比创建销毁线程对象时间还短的话，那么时间将会大程度浪费在虚拟机">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/3515789-07c408015269c259.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://hexo.minminaya.cn/“new/"/>
+
+
+
+
+
+  <title>“new | minminaya</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">minminaya</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+    
+    
+    <div class="post-block page">
+      <header class="post-header">
+
+	<h1 class="post-title" itemprop="name headline">“new</h1>
+
+
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+        
+        
+          <h1 id="线程池与Android的日日夜夜"><a href="#线程池与Android的日日夜夜" class="headerlink" title="线程池与Android的日日夜夜"></a>线程池与Android的日日夜夜</h1><p>假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/3515789-07c408015269c259.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.jpg"></p>
+<p>正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机频繁的GC，假如说，一个请求所用的时间比创建销毁线程对象时间还短的话，那么时间将会大程度浪费在虚拟机的GC上，系统性能降低。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/3515789-97604326567ecd92.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.jpg"></p>
+<p>所以啊，线程池主要就是复用线程对象，就跟上面所说，解决线程对象频繁创建和销毁的问题，内部可以抽象成一个“池”，线程对象放在里头，需要用的时候就拿出来用，不用了就泡着，泡坏了或者不要了就清掉。也正因为如此，<strong>线程池可以用来处理高并发的访问请求</strong>。</p>
+<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ol>
+<li>先从最基本的线程的3种用法说起</li>
+<li>一个最基本的线程池用例</li>
+<li>分析各种参数：线程池创建的ThreadPoolExecutor类</li>
+<li>常见阻塞队列及使用场景</li>
+<li>比较Executors中4种线程池的区别和使用情景</li>
+<li>对比线程和线程池的优缺点，各种使用场景及其区别 </li>
+<li>其他：并发集合框架</li>
+<li>默认Executors生成线程池和自传参数进构造方法ThreadPoolExecutor创建线程池的利弊</li>
+<li>分析实际应用，如OkHttp中的线程池，如AsyncTask中的线程池，RxJava中的线程池</li>
+</ol>
+<h1 id="一-先从最基本的线程开始"><a href="#一-先从最基本的线程开始" class="headerlink" title="一 先从最基本的线程开始"></a>一 先从最基本的线程开始</h1><h6 id="先重新了解一下，创建线程的三种方法："><a href="#先重新了解一下，创建线程的三种方法：" class="headerlink" title="先重新了解一下，创建线程的三种方法："></a>先重新了解一下，创建线程的三种方法：</h6><ol>
+<li>继承Thread类创建线程</li>
+<li>实现Runnable创建线程</li>
+<li>实现Callable接口 、使用Future类接收返回值</li>
+</ol>
+<p>（1）继承Thread类，重写父类run方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyThread extends Thread &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        super.run();</span><br><span class="line">        System.out.println(&quot;biubiubiu&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] arg)&#123;</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        myThread.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（2）实现Runnable接口，实现接口的run方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] arg) &#123;</span><br><span class="line">        MyRunnable myRunnable = new MyRunnable();</span><br><span class="line">        Thread thread = new Thread(myRunnable);</span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;光头强和熊大熊二&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，我们最常用的是匿名的内部Runnable类</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyRunnable &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] arg) &#123;</span><br><span class="line"></span><br><span class="line">        Thread thread = new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                System.out.println(&quot;光头强的斧头&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（3）实现Callable接口，使用Future来接收返回值（接收可选）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.util.concurrent.Callable;</span><br><span class="line">import java.util.concurrent.ExecutionException;</span><br><span class="line">import java.util.concurrent.FutureTask;</span><br><span class="line"></span><br><span class="line">public class MyCallable implements Callable&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] arg) &#123;</span><br><span class="line"></span><br><span class="line">        MyCallable myCallable = new MyCallable();</span><br><span class="line">        FutureTask&lt;String&gt; futureTask = new FutureTask&lt;&gt;(myCallable);</span><br><span class="line">        new Thread(futureTask).start();</span><br><span class="line">        try &#123;</span><br><span class="line">            System.out.println(futureTask.get());</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (ExecutionException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String call() throws Exception &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        return &quot;猪猪侠&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="二、一个最基本的线程池用例"><a href="#二、一个最基本的线程池用例" class="headerlink" title="二、一个最基本的线程池用例"></a>二、一个最基本的线程池用例</h1><p>先放一个基本的线程池，这里构造的是核心线程为2，最大线程数为5，有界阻塞数列为5的线程池</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.util.concurrent.*;</span><br><span class="line"></span><br><span class="line">public class MyDemo &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] arg) &#123;</span><br><span class="line">        ExecutorService executorService = new ThreadPoolExecutor(2, 5, 60, TimeUnit.MILLISECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(5));</span><br><span class="line"></span><br><span class="line">        for (int i = 0; i &lt; 13; i++) &#123;</span><br><span class="line">            int finalI = i;</span><br><span class="line">            executorService.execute(new Runnable() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    System.out.println(&quot;当前顺序是：&quot; + finalI + &quot;，线程名字&quot; + Thread.currentThread().getName());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>console如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.util.concurrent.RejectedExecutionException: Task MyDemo$1@135fbaa4 rejected from java.util.concurrent.ThreadPoolExecutor@45ee12a7[Running, pool size = 5, active threads = 5, queued tasks = 5, completed tasks = 0]</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor$AbortPolicy.rejectedExecution(ThreadPoolExecutor.java:2063)</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor.reject(ThreadPoolExecutor.java:830)</span><br><span class="line">	at java.util.concurrent.ThreadPoolExecutor.execute(ThreadPoolExecutor.java:1379)</span><br><span class="line">	at MyDemo.main(MyDemo.java:10)</span><br><span class="line">当前顺序是：0，线程名字pool-1-thread-1</span><br><span class="line">当前顺序是：2，线程名字pool-1-thread-1</span><br><span class="line">当前顺序是：3，线程名字pool-1-thread-1</span><br><span class="line">当前顺序是：4，线程名字pool-1-thread-1</span><br><span class="line">当前顺序是：5，线程名字pool-1-thread-1</span><br><span class="line">当前顺序是：6，线程名字pool-1-thread-1</span><br><span class="line">当前顺序是：1，线程名字pool-1-thread-2</span><br><span class="line">当前顺序是：7，线程名字pool-1-thread-3</span><br><span class="line">当前顺序是：8，线程名字pool-1-thread-4</span><br><span class="line">当前顺序是：9，线程名字pool-1-thread-5</span><br></pre></td></tr></table></figure>
+<p>先看这里的console，这里打印了<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 三、线程池创建的ThreadPoolExecutor类</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ThreadPoolExecutor类有4个构造方法，其中的三个构造方法最终会调用参数最多的（7个）的构造方法</span><br></pre></td></tr></table></figure></p>
+<p> public ThreadPoolExecutor(int corePoolSize,<br>                              int maximumPoolSize,<br>                              long keepAliveTime,<br>                              TimeUnit unit,<br>                              BlockingQueue<runnable> workQueue,<br>                              ThreadFactory threadFactory,<br>                              RejectedExecutionHandler handler) {</runnable></p>
+<pre><code>..
+</code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">**构造方法各个参数：**</span><br><span class="line">1. ```corePoolSize```：线程池中的核心线程数，一般情况设置为CPU核心数</span><br><span class="line">2. ```maximumPoolSize```：线程池的线程数量最大值，非核心线程数=最大值-核心线程数</span><br><span class="line">3. ```keepAliveTime```：非核心线程闲置时候的超时回收时间，要是想多任务(该任务轻量执行内容/块)下线程的利用率，可以增大这个超时时间</span><br><span class="line">4. ```unit```：上面这个参数的单位，有分秒毫秒等等</span><br><span class="line">5. ```workQueue```：线程池的任务队列。新建的线程数超过核心线程时，线程加入任务队列进 行等待或者分发。常用的有```ArrayBlockingQueue```、```LinkedBlockingQueue```、```SynchronousQueue</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li><code>threadFactory</code>：线程池的线程工厂。常用来设置每个线程的名字。默认名字是 <code>pool-1-thread-1</code>，一般默认为<code>Executors.defaultThreadFactory()</code>即可，当然，ThreadPoolExecutor类的构造方法最终都是传入<code>DefaultThreadFactory</code></li>
+<li><code>RejectedExecutionHandler</code>：饱和策略。当任务队列和线程池都达到最大值时的处理策略。默认是无法处理新的任务的<code>AbortPolicy</code>。比如上面第二节console输出的是<code>AbortPolicy</code>策略。那是因为创建的最大线程数是5，任务队列是5，那么线程池中会存在10个线程，而我创建了13个线程的同时超过了10个线程，接着就会抛出这个<code>RejectedExecutionHandler</code>异常</li>
+</ol>
+<h6 id="1-线程池的处理过程"><a href="#1-线程池的处理过程" class="headerlink" title="1. 线程池的处理过程"></a>1. 线程池的处理过程</h6><p>拿第二节创建的线程池来举例，核心线程是2，最大线程数是5（说明非核心线程数为3）。任务队列是ArrayBlockingQueue（特点是它用数组实现，元素排序规则是先进先出，默认不保证线程池按照阻塞的先后顺序访问队列），数量为5个，超时为6秒，其他都为默认。</p>
+<p>那么，其实内部是这样的——–&gt;看图:</p>
+<ol>
+<li>核心线程未饱和<br><img src="https://upload-images.jianshu.io/upload_images/3515789-b4a321c33910abec.gif?imageMogr2/auto-orient/strip" alt="核心线程未饱和.gif"><br>当只有1核心线程时，这时新建的任务会直接添加为核心线程</li>
+</ol>
+<hr>
+<ol start="2">
+<li>核心线程饱和队列未饱和<br><img src="https://upload-images.jianshu.io/upload_images/3515789-82e987f0ca11a208.gif?imageMogr2/auto-orient/strip" alt="核心线程饱和队列未饱和.gif"><br>当核心线程已满，任务队列未饱和时，这时新建的任务会添加到工作队列</li>
+</ol>
+<hr>
+<ol start="3">
+<li>核心线程饱和队列饱和非核心线程未饱和<br><img src="https://upload-images.jianshu.io/upload_images/3515789-471b1c192a834240.gif?imageMogr2/auto-orient/strip" alt="核心线程饱和队列饱和非核心线程未饱和.gif"><br>当核心线程已满，任务队列已饱和，非核心线程未饱和时，新建的任务会添加为非核心线程。</li>
+</ol>
+<hr>
+<ol start="4">
+<li>核心线程饱和队列饱和非核心线程饱和<br><img src="https://upload-images.jianshu.io/upload_images/3515789-2fae49209fbdea7a.gif?imageMogr2/auto-orient/strip" alt="核心线程饱和队列饱和非核心线程饱和.gif"></li>
+</ol>
+<p>当线程池线程已达最大值，队列也已饱和，这时新建任务会执行饱和策略</p>
+<hr>
+<p><strong>总结起来，其实就是：</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/3515789-83b471856880e85f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="线程池执行流程.png"></p>
+<hr>
+<p>这里很懵逼的是阻塞队列，事实上不是每个阻塞队列都像<code>ArrayBlockingQueue</code>如此，下节将分析常用的阻塞队列</p>
+<h1 id="四、常见阻塞队列及使用场景"><a href="#四、常见阻塞队列及使用场景" class="headerlink" title="四、常见阻塞队列及使用场景"></a>四、常见阻塞队列及使用场景</h1><p>阻塞队列使用方法大同小异，只要了解他的内部结构构成，以及由其结构影响的各种特性即可，具体测试及用法可看<br><a href="https://www.cnblogs.com/tjudzj/p/4454490.html" target="_blank" rel="noopener">BlockingQueue（阻塞队列）详解</a>、<br><a href="https://blog.csdn.net/qq_19431333/article/details/72864017" target="_blank" rel="noopener">深入理解阻塞队列（二）——ArrayBlockingQueue源码分析</a>、<br><a href="https://blog.csdn.net/qq_19431333/article/details/73087366" target="_blank" rel="noopener">深入理解阻塞队列（三）——LinkedBlockingQueue源码分析</a></p>
+<p>常用的几种阻塞队列如下：</p>
+<ul>
+<li>ArrayBlockingQueue：有界阻塞队列，它用数组实现，<strong>元素排序规则是先进先出</strong>，默认不保证线程池按照阻塞的先后顺序访问队列，一般构造方法会指定元素数量，和是否公平顺序按照阻塞顺序访问队列，通常用在需要生产者和消费者顺序的操作队列中的数据，以降低吞吐量的时候，比如</li>
+<li>LinkedBlockingQueue：有界阻塞队列，链表实现，与ArrayBlockingQueue区别不同，<strong>它是并行的操作队列中的数据</strong>，这也决定了它能用于高并发，巨大吞吐量的情况，需要注意的是，LinkedBlockingQueue的容量记得要指定哦，不然太大了加入生产者的速度大于消费者，那么队列阻塞可能不会阻塞，因为内存会炸。</li>
+<li>SyschronousQueue：<strong>不存储元素的异步队列，有个特点，插入操作的完成要等待另一个线程的对应移除操作</strong>，适合那种立即处理且耗时较少的任务。</li>
+</ul>
+<p>#五、比较Executors中4种线程池的区别和使用情景</p>
+<p>2018-04-08 11:41PM<br>更新中…</p>
+
+        
+      </div>
+      
+      
+      
+    </div>
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">minminaya</p>
+              <p class="site-description motion-element" itemprop="description">minminaya的博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/minminaya" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:minminaya@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池与Android的日日夜夜"><span class="nav-number">1.</span> <span class="nav-text">线程池与Android的日日夜夜</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">2.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-先从最基本的线程开始"><span class="nav-number">3.</span> <span class="nav-text">一 先从最基本的线程开始</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#先重新了解一下，创建线程的三种方法："><span class="nav-number">3.0.0.0.0.1.</span> <span class="nav-text">先重新了解一下，创建线程的三种方法：</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、一个最基本的线程池用例"><span class="nav-number">4.</span> <span class="nav-text">二、一个最基本的线程池用例</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-线程池的处理过程"><span class="nav-number">4.0.0.0.0.1.</span> <span class="nav-text">1. 线程池的处理过程</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、常见阻塞队列及使用场景"><span class="nav-number">5.</span> <span class="nav-text">四、常见阻塞队列及使用场景</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">minminaya</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+  <div class="footer-custom"><p>Hosted by <a href="https://pages.coding.me" style="font-weight:bold">Coding Pages</a></p></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2161457"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
