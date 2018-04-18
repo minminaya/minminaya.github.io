@@ -81,17 +81,17 @@
 
 <meta name="description" content="好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。 EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至改进轮子都有令人窒息的好处。  这张是EventBus官网档下来的哈哈哈哈哈！ 很明显啦，Event">
 <meta property="og:type" content="article">
-<meta property="og:title" content="minminaya">
-<meta property="og:url" content="http://hexo.minminaya.cn/2018/04/09/EventBus源码分析/index.html">
+<meta property="og:title" content="EventBus源码分析">
+<meta property="og:url" content="http://hexo.minminaya.cn/2018/04/19/EventBus源码分析/index.html">
 <meta property="og:site_name" content="minminaya">
 <meta property="og:description" content="好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。 EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至改进轮子都有令人窒息的好处。  这张是EventBus官网档下来的哈哈哈哈哈！ 很明显啦，Event">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3515789-8193ca0b3fd0d578.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3515789-108c18b81e28d566.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3515789-c6eed382d2b7ccb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-04-18T18:29:17.730Z">
+<meta property="og:updated_time" content="2018-04-18T19:27:54.484Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="minminaya">
+<meta name="twitter:title" content="EventBus源码分析">
 <meta name="twitter:description" content="好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。 EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至改进轮子都有令人窒息的好处。  这张是EventBus官网档下来的哈哈哈哈哈！ 很明显啦，Event">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/3515789-8193ca0b3fd0d578.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
@@ -123,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://hexo.minminaya.cn/2018/04/09/EventBus源码分析/"/>
+  <link rel="canonical" href="http://hexo.minminaya.cn/2018/04/19/EventBus源码分析/"/>
 
 
 
 
 
-  <title> | minminaya</title>
+  <title>EventBus源码分析 | minminaya</title>
   
 
 
@@ -246,7 +246,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/09/EventBus源码分析/">
+    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/19/EventBus源码分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="minminaya">
@@ -263,7 +263,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">EventBus源码分析</h1>
         
 
         <div class="post-meta">
@@ -275,8 +275,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-09T12:29:15+08:00">
-                2018-04-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T03:22:18+08:00">
+                2018-04-19
               </time>
             
 
@@ -389,6 +389,22 @@
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/19/线程池与Android的日日夜夜/" rel="prev" title="线程池与Android的日日夜夜">
+                线程池与Android的日日夜夜 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
 
       
       
@@ -466,7 +482,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

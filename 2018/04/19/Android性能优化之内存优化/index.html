@@ -79,16 +79,17 @@
 
 
 
-<meta name="description" content="minminaya的博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="minminaya">
-<meta property="og:url" content="http://hexo.minminaya.cn/index.html">
+<meta name="description" content="需要知道的一些 Android内存管理是paging分页和memory-mapping内存映射技术（通过映射将二级存储的相关文件关联），没有使用虚拟内存技术，可用内存数量完全取决于RAM。 ART相对于Dalvik，减少了垃圾回收的步骤，为位图对象Bitmap添加了一个特殊的内存块。 ART虚拟机的AOT提前编译在Android N时候添加了JIT及时编译，用于在应用程序执行期间，它仅仅是用于补充">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android性能优化之内存优化">
+<meta property="og:url" content="http://hexo.minminaya.cn/2018/04/19/Android性能优化之内存优化/index.html">
 <meta property="og:site_name" content="minminaya">
-<meta property="og:description" content="minminaya的博客">
+<meta property="og:description" content="需要知道的一些 Android内存管理是paging分页和memory-mapping内存映射技术（通过映射将二级存储的相关文件关联），没有使用虚拟内存技术，可用内存数量完全取决于RAM。 ART相对于Dalvik，减少了垃圾回收的步骤，为位图对象Bitmap添加了一个特殊的内存块。 ART虚拟机的AOT提前编译在Android N时候添加了JIT及时编译，用于在应用程序执行期间，它仅仅是用于补充">
 <meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2018-04-18T19:32:27.579Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="minminaya">
-<meta name="twitter:description" content="minminaya的博客">
+<meta name="twitter:title" content="Android性能优化之内存优化">
+<meta name="twitter:description" content="需要知道的一些 Android内存管理是paging分页和memory-mapping内存映射技术（通过映射将二级存储的相关文件关联），没有使用虚拟内存技术，可用内存数量完全取决于RAM。 ART相对于Dalvik，减少了垃圾回收的步骤，为位图对象Bitmap添加了一个特殊的内存块。 ART虚拟机的AOT提前编译在Android N时候添加了JIT及时编译，用于在应用程序执行期间，它仅仅是用于补充">
 
 
 
@@ -118,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://hexo.minminaya.cn/"/>
+  <link rel="canonical" href="http://hexo.minminaya.cn/2018/04/19/Android性能优化之内存优化/"/>
 
 
 
 
 
-  <title>minminaya</title>
+  <title>Android性能优化之内存优化 | minminaya</title>
   
 
 
@@ -143,8 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,140 +227,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/19/Android性能优化之布局优化/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="minminaya">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="minminaya">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/Android性能优化之布局优化/" itemprop="url">Android性能优化之布局优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T03:29:22+08:00">
-                2018-04-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          
-在布局文件中的背景遮挡的情况下，避免绘制DecorView的背景（有别于Activity的背景），减少过度绘制。
-
-android:windowBackground属性就是DecorView的背景
-
-将Activity的背景放到DecorView的背景中（虽然性能优化不大，但是能把平滑的感知提供给
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/19/Android性能优化之布局优化/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -390,9 +259,7 @@ android:windowBackground属性就是DecorView的背景
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/Android性能优化之内存优化/" itemprop="url">Android性能优化之内存优化</a></h1>
+          <h1 class="post-title" itemprop="name headline">Android性能优化之内存优化</h1>
         
 
         <div class="post-meta">
@@ -442,21 +309,47 @@ android:windowBackground属性就是DecorView的背景
       
 
       
-        
-          
-          需要知道的一些
-Android内存管理是paging分页和memory-mapping内存映射技术（通过映射将二级存储的相关文件关联），没有使用虚拟内存技术，可用内存数量完全取决于RAM。
-ART相对于Dalvik，减少了垃圾回收的步骤，为位图对象Bitmap添加了一个特殊的内存块。
-ART虚拟机的
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/19/Android性能优化之内存优化/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+        <h1 id="需要知道的一些"><a href="#需要知道的一些" class="headerlink" title="需要知道的一些"></a>需要知道的一些</h1><ol>
+<li>Android内存管理是paging分页和memory-mapping内存映射技术（通过映射将二级存储的相关文件关联），没有使用虚拟内存技术，可用内存数量完全取决于RAM。</li>
+<li>ART相对于Dalvik，减少了垃圾回收的步骤，为位图对象Bitmap添加了一个特殊的内存块。</li>
+<li>ART虚拟机的AOT提前编译在Android N时候添加了JIT及时编译，用于在应用程序执行期间，它仅仅是用于补充AOT的功能。</li>
+<li>内存抖动一般发生在短时间内大量创建新对象和GC对象。</li>
+</ol>
+<hr>
+<h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><ol>
+<li>数据类型的选用，按需求控制基本类型的使用，减少内存和CPU计算</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">byte:8bit</span><br><span class="line">char:16bit</span><br><span class="line">float:32bit</span><br><span class="line">double:64bit</span><br><span class="line">short:16bit</span><br><span class="line">int:32bit</span><br><span class="line">long:64bit</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>避免使用包装类型，以减少自动装箱。比如Integer类和int类型</li>
+<li>1000个以内数据时，用Android优化过的的SparseArray代替平时使用的HashMap</li>
+</ol>
+<ul>
+<li><strong>SparseArray避免了key和value的自动装箱</strong>，它使用的内存区域是连续的（比如HashMap可能10个桶，只有6个桶存了数据），减少内存浪费。</li>
+<li>SparseArray由2个数组组成，假如容量数量太大，二分查找将会不及hash查找快速</li>
+</ul>
+<ol start="4">
+<li>优先使用ArrayMap代替HashMap，它是SparseArray和HashMap的折中方案，可以使用对象作为Map的key。</li>
+<li>优化循坏，正常情况下，增强型for循坏&gt;for循坏&gt;While循坏&gt;Iterator循坏，循坏时候的length注意，不要每次循坏都计算数组或者别的什么数据结构的长度，应该单独抽取计算。</li>
+<li>避免使用枚举，用静态常量或者注解来代替</li>
+<li>静态常量static和static final是两回事，推荐使用static final，以充分节约内存。JVM优化情况是static final类型的会存在与DEX文件中而不是被<clinit>初始化在内存中（以空间换时间）。减少内存使用。</clinit></li>
+<li>尽量减少创建临时对象，因为他们会频繁触发GC。</li>
+<li>字符串使用StringBuilder来拼接。不要用<code>String str = &quot;ab&quot;; str += &quot;bc&quot;</code>这种方式。</li>
+<li>重复使用的对象应该设置为全局对象。假设它是方法内部的对象，每次执行每次分配内存，直到垃圾收集器到达回收上限才会被回收。</li>
+<li>输入流（标记为is）输出流（标记为os）释放的时候，要分别独立在各自的try catch语句中关闭。以避免由于is假如抛出异常时，os不能正常关闭。</li>
+<li>使用对象池重用对象，借鉴线程池的手段。</li>
+<li>Activity的Context慎用，优化方法一般是使用Application的Context。</li>
+<li>避免在Activity中使用静态常量</li>
+<li>使用弱引用和静态内部类来处理Activity中使用耗时任务的情况（比如定时任务的AsyncTask）</li>
+<li>同上， 弱引用来持有一个线程/定时的Handler</li>
+<li>使用IntentService来代替Service，因为它能自动停止。</li>
+<li>使用HandlerThread或者线程池来启动线程，HandlerThread通过Looper能通过消息来多次重复使用该线程减少开支。</li>
+<li>使用四大组件和Fragment，Application实现的 ComponentCallback2接口的onTrimMemory()方法在监听到内存的各种临界值时，需要处理的逻辑，比如清楚缓存，释放堆对象等。（当然还有ComponentCallback接口的onLowMemory方法，但是onTrimMemory()提供了更多的参数，推荐使用）</li>
+<li>不要在menifest文件中添加LargeHeap属性来提高堆空间，太大会影响垃圾回收的时间。会使UI延迟卡顿。</li>
+</ol>
+<hr>
+<p>END</p>
+
       
     </div>
     
@@ -473,140 +366,32 @@ ART虚拟机的
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/19/线程池与Android的日日夜夜/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="minminaya">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="minminaya">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/线程池与Android的日日夜夜/" itemprop="url">线程池与Android的日日夜夜</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T03:25:18+08:00">
-                2018-04-19
-              </time>
+              <a href="/2018/04/19/线程池与Android的日日夜夜/" rel="next" title="线程池与Android的日日夜夜">
+                <i class="fa fa-chevron-left"></i> 线程池与Android的日日夜夜
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
+              <a href="/2018/04/19/Android性能优化之布局优化/" rel="prev" title="Android性能优化之布局优化">
+                Android性能优化之布局优化 <i class="fa fa-chevron-right"></i>
+              </a>
             
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          线程池与Android的日日夜夜假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。
-
-正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/19/线程池与Android的日日夜夜/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -616,137 +401,11 @@ ART虚拟机的
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/19/EventBus源码分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="minminaya">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="minminaya">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/EventBus源码分析/" itemprop="url">EventBus源码分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T03:22:18+08:00">
-                2018-04-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。
-EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/19/EventBus源码分析/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -754,6 +413,15 @@ EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -774,8 +442,17 @@ EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -833,6 +510,22 @@ EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#需要知道的一些"><span class="nav-number">1.</span> <span class="nav-text">需要知道的一些</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优化"><span class="nav-number">2.</span> <span class="nav-text">优化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -968,6 +661,10 @@ EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -993,6 +690,10 @@ EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本
   
     
 
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2161457"></script>
+      <!-- UY END -->
     
   
 

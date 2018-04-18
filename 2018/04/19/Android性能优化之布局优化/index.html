@@ -79,16 +79,19 @@
 
 
 
-<meta name="description" content="minminaya的博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="minminaya">
-<meta property="og:url" content="http://hexo.minminaya.cn/index.html">
+<meta name="description" content="在布局文件中的背景遮挡的情况下，避免绘制DecorView的背景（有别于Activity的背景），减少过度绘制。  android:windowBackground属性就是DecorView的背景  将Activity的背景放到DecorView的背景中（虽然性能优化不大，但是能把平滑的感知提供给用户） 离屏缓冲开启硬件层（API 14后默认开启）  view.setLayerType(View">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android性能优化之布局优化">
+<meta property="og:url" content="http://hexo.minminaya.cn/2018/04/19/Android性能优化之布局优化/index.html">
 <meta property="og:site_name" content="minminaya">
-<meta property="og:description" content="minminaya的博客">
+<meta property="og:description" content="在布局文件中的背景遮挡的情况下，避免绘制DecorView的背景（有别于Activity的背景），减少过度绘制。  android:windowBackground属性就是DecorView的背景  将Activity的背景放到DecorView的背景中（虽然性能优化不大，但是能把平滑的感知提供给用户） 离屏缓冲开启硬件层（API 14后默认开启）  view.setLayerType(View">
 <meta property="og:locale" content="zh">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3515789-f2fe8d86d0f0e5c5.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-04-18T19:32:46.606Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="minminaya">
-<meta name="twitter:description" content="minminaya的博客">
+<meta name="twitter:title" content="Android性能优化之布局优化">
+<meta name="twitter:description" content="在布局文件中的背景遮挡的情况下，避免绘制DecorView的背景（有别于Activity的背景），减少过度绘制。  android:windowBackground属性就是DecorView的背景  将Activity的背景放到DecorView的背景中（虽然性能优化不大，但是能把平滑的感知提供给用户） 离屏缓冲开启硬件层（API 14后默认开启）  view.setLayerType(View">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/3515789-f2fe8d86d0f0e5c5.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -118,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://hexo.minminaya.cn/"/>
+  <link rel="canonical" href="http://hexo.minminaya.cn/2018/04/19/Android性能优化之布局优化/"/>
 
 
 
 
 
-  <title>minminaya</title>
+  <title>Android性能优化之布局优化 | minminaya</title>
   
 
 
@@ -143,8 +146,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,9 +229,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -259,9 +261,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/Android性能优化之布局优化/" itemprop="url">Android性能优化之布局优化</a></h1>
+          <h1 class="post-title" itemprop="name headline">Android性能优化之布局优化</h1>
         
 
         <div class="post-meta">
@@ -311,23 +311,48 @@
       
 
       
-        
-          
-          
-在布局文件中的背景遮挡的情况下，避免绘制DecorView的背景（有别于Activity的背景），减少过度绘制。
+        <ol>
+<li>在布局文件中的背景遮挡的情况下，避免绘制DecorView的背景（有别于Activity的背景），减少过度绘制。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">android:windowBackground属性就是DecorView的背景</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>将Activity的背景放到DecorView的背景中（虽然性能优化不大，但是能把平滑的感知提供给用户）</li>
+<li>离屏缓冲开启硬件层（API 14后默认开启）</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">view.setLayerType(View.LAYER_TPYE_HARDWARE, null)</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>在动画启动前，开启硬件层，在动画结束时，立即关闭它，以释放被占用的显存，以用来提高动画性能，减少非必要计算</li>
+<li>扁平化视图层级</li>
+<li>对背景图片谁用9-patches图片，可一定程度上减少过度绘制，因为Android系统针对9-patches图片做了优化。</li>
+<li>一定情况下，用GridLayout代替LinearLayout或者RelativeLayout，一般情况下，RelativeLayout可以最大化减少布局层级，相同的布局效果，LinearLayout也许用了2层布局，RelativeLayout用一层即可，但是LinearLayout效率是大于RelativeLayout的。GridLayout某些情况可以实现LinearLayout的效果。而且它由于是表格布局，1层布局层级实现相同的效果。</li>
+<li><include>标签重用布局文件</include></li>
+<li><merge>标签减少布局冗余，相当于直接将<merge>标签里的内容直接插到目标布局中，不产生多层布局。</merge></merge></li>
+<li>ViewStup延迟加载，缩短首次加载时间，减少GPU，CPU使用，减少内存分配</li>
+<li>ListView和RecyclerView使用ViewHolder模式重用View避免频繁调用findViewById()消耗大量计算。<br>ListVIew中经常会出现别名冲突的情况，如下</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/3515789-f2fe8d86d0f0e5c5.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<ol start="12">
+<li>为ImageView对象设置一个适当的尺寸，避免引起内存泄漏。常用手段是压缩Bitmap。</li>
+<li>自定义View中避免不必要的重绘（invalidate()这些）</li>
+<li>对每个View进行适当的裁剪，只绘制可见的一部分，必要时候为了提升用户体验可以缓冲即将入屏的那部分View，以避免非必要的过度绘制。</li>
+<li>xml布局的图形化Design窗口可以查看视图的层级，减少视图嵌套的深度。（开发初期阶段）</li>
+<li>Monitor中的Hierarchy  Viewer对分析视图层级，调试UI界面，布局文件，查看绘制时间有的巨大的作用（当前SDK下Monitor逐渐被Android Profiler取代，Monitor可以0在{SDK根目录}\tools\lib\monitor-x86_64找到）</li>
+<li><p>Android设备开发者模式中<strong>调试GPU过度绘制</strong>，可以打开根据不同的色块查看过度绘制的次数（注意关闭护眼模式，或者色温调到标准）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">真彩色（0次）&lt;蓝色（1次）&lt;绿色（2次）&lt;粉色（3次）&lt;红色（4次及以上）</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Android设备GPU呈现模式分析，可以在设备屏幕直接查看渲染不同阶段所花费的时间。以蓝紫红橙四个色段的长条显示不同处理阶段，以及他们用的时间比</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">蓝：绘制时间，一般指onDraw，当然还有别的，</span><br><span class="line">紫：准备时间</span><br><span class="line">红：处理OpenGL的时间</span><br><span class="line">橙：CPU等待GPU完成工作所花费的时间</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>adb shell dumbsys命令，用于查看所有程序操作，内存使用情况，以及每个渲染操作花费的确切时间。以数值形式返回，它更像一个log。API 23之后，dumbsys的新特性framestats会在前面的基础上列出了帧渲染过程中每个信息步骤所消费的时间。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">framestats特性中的IntentedVsysnc和Vsync如果不一样可说明帧发生了丢失（伴随的卡顿的产生）</span><br></pre></td></tr></table></figure>
+<ol start="20">
+<li>Systrace分析渲染的各种信息，graphics，input，View System，WebView，Window Manager，Activity Manager等等</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">Trace.beginSection(&quot;Section Name&quot;);</span><br><span class="line">try&#123;</span><br><span class="line">    //要分析的代码</span><br><span class="line">    &#125;finally&#123;</span><br><span class="line">    Trace.endSection();    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
 
-android:windowBackground属性就是DecorView的背景
-
-将Activity的背景放到DecorView的背景中（虽然性能优化不大，但是能把平滑的感知提供给
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/19/Android性能优化之布局优化/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
       
     </div>
     
@@ -344,141 +369,28 @@ android:windowBackground属性就是DecorView的背景
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/19/Android性能优化之内存优化/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="minminaya">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="minminaya">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/Android性能优化之内存优化/" itemprop="url">Android性能优化之内存优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T03:27:18+08:00">
-                2018-04-19
-              </time>
+              <a href="/2018/04/19/Android性能优化之内存优化/" rel="next" title="Android性能优化之内存优化">
+                <i class="fa fa-chevron-left"></i> Android性能优化之内存优化
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          需要知道的一些
-Android内存管理是paging分页和memory-mapping内存映射技术（通过映射将二级存储的相关文件关联），没有使用虚拟内存技术，可用内存数量完全取决于RAM。
-ART相对于Dalvik，减少了垃圾回收的步骤，为位图对象Bitmap添加了一个特殊的内存块。
-ART虚拟机的
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/19/Android性能优化之内存优化/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -488,272 +400,27 @@ ART虚拟机的
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/19/线程池与Android的日日夜夜/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="minminaya">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="minminaya">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/线程池与Android的日日夜夜/" itemprop="url">线程池与Android的日日夜夜</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T03:25:18+08:00">
-                2018-04-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          线程池与Android的日日夜夜假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。
-
-正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/19/线程池与Android的日日夜夜/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
 
 
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/19/EventBus源码分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="minminaya">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="minminaya">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/EventBus源码分析/" itemprop="url">EventBus源码分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T03:22:18+08:00">
-                2018-04-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。
-EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/19/EventBus源码分析/#more" rel="contents">
-              Read more &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
 
   
 
 
-          </div>
-          
-
-
-          
 
         </div>
         
@@ -968,6 +635,10 @@ EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -993,6 +664,10 @@ EventBus的使用相信大家都使的贼溜了。实在不行看文档嘛。本
   
     
 
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2161457"></script>
+      <!-- UY END -->
     
   
 

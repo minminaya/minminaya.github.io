@@ -80,22 +80,17 @@
 
 
 <meta name="description" content="线程池与Android的日日夜夜假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。  正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机频繁的GC，假如说，一个请求所用的时间比创建销毁线程对象时间还短的话，那么时间将会大程度浪费在虚拟机">
-<meta property="og:type" content="website">
-<meta property="og:title" content="“new">
-<meta property="og:url" content="http://hexo.minminaya.cn/“new/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程池与Android的日日夜夜">
+<meta property="og:url" content="http://hexo.minminaya.cn/2018/04/19/线程池与Android的日日夜夜/index.html">
 <meta property="og:site_name" content="minminaya">
 <meta property="og:description" content="线程池与Android的日日夜夜假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。  正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机频繁的GC，假如说，一个请求所用的时间比创建销毁线程对象时间还短的话，那么时间将会大程度浪费在虚拟机">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-07c408015269c259.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-97604326567ecd92.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-b4a321c33910abec.gif?imageMogr2/auto-orient/strip">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-82e987f0ca11a208.gif?imageMogr2/auto-orient/strip">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-471b1c192a834240.gif?imageMogr2/auto-orient/strip">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-2fae49209fbdea7a.gif?imageMogr2/auto-orient/strip">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-83b471856880e85f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-04-18T19:22:57.467Z">
+<meta property="og:updated_time" content="2018-04-18T19:30:20.235Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="“new">
+<meta name="twitter:title" content="线程池与Android的日日夜夜">
 <meta name="twitter:description" content="线程池与Android的日日夜夜假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。  正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机频繁的GC，假如说，一个请求所用的时间比创建销毁线程对象时间还短的话，那么时间将会大程度浪费在虚拟机">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/3515789-07c408015269c259.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
@@ -127,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://hexo.minminaya.cn/“new/"/>
+  <link rel="canonical" href="http://hexo.minminaya.cn/2018/04/19/线程池与Android的日日夜夜/"/>
 
 
 
 
 
-  <title>“new | minminaya</title>
+  <title>线程池与Android的日日夜夜 | minminaya</title>
   
 
 
@@ -238,24 +233,86 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/19/线程池与Android的日日夜夜/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="minminaya">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="minminaya">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">“new</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <h1 id="线程池与Android的日日夜夜"><a href="#线程池与Android的日日夜夜" class="headerlink" title="线程池与Android的日日夜夜"></a>线程池与Android的日日夜夜</h1><p>假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。</p>
+          <h1 class="post-title" itemprop="name headline">线程池与Android的日日夜夜</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T03:25:18+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="线程池与Android的日日夜夜"><a href="#线程池与Android的日日夜夜" class="headerlink" title="线程池与Android的日日夜夜"></a>线程池与Android的日日夜夜</h1><p>假如你Java中研究到了线程池的话，一般来说，你已经对线程的原理颇有研究了，或者说，你意识到了线程的某些瓶颈或者缺点。你说，要有光，所以，天降线程池。</p>
 <p><img src="https://upload-images.jianshu.io/upload_images/3515789-07c408015269c259.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.jpg"></p>
 <p>正儿八经的说，如果你为每一个请求创建一个新的线程，这在性能上影响是巨大的，因为线程对象的创建销毁需要Java虚拟机频繁的GC，假如说，一个请求所用的时间比创建销毁线程对象时间还短的话，那么时间将会大程度浪费在虚拟机的GC上，系统性能降低。</p>
 <p><img src="https://upload-images.jianshu.io/upload_images/3515789-97604326567ecd92.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.jpg"></p>
@@ -265,7 +322,7 @@
 <li>一个最基本的线程池用例</li>
 <li>分析各种参数：线程池创建的ThreadPoolExecutor类</li>
 <li>常见阻塞队列及使用场景</li>
-<li>比较Executors中4种线程池的区别和使用情景</li>
+<li>比较Executors中3种线程池的区别和使用情景</li>
 <li>对比线程和线程池的优缺点，各种使用场景及其区别 </li>
 <li>其他：并发集合框架</li>
 <li>默认Executors生成线程池和自传参数进构造方法ThreadPoolExecutor创建线程池的利弊</li>
@@ -293,51 +350,132 @@
 <pre><code>..
 </code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">**构造方法各个参数：**</span><br><span class="line">1. ```corePoolSize```：线程池中的核心线程数，一般情况设置为CPU核心数</span><br><span class="line">2. ```maximumPoolSize```：线程池的线程数量最大值，非核心线程数=最大值-核心线程数</span><br><span class="line">3. ```keepAliveTime```：非核心线程闲置时候的超时回收时间，要是想多任务(该任务轻量执行内容/块)下线程的利用率，可以增大这个超时时间</span><br><span class="line">4. ```unit```：上面这个参数的单位，有分秒毫秒等等</span><br><span class="line">5. ```workQueue```：线程池的任务队列。新建的线程数超过核心线程时，线程加入任务队列进 行等待或者分发。常用的有```ArrayBlockingQueue```、```LinkedBlockingQueue```、```SynchronousQueue</span><br></pre></td></tr></table></figure>
 <ol start="6">
-<li><code>threadFactory</code>：线程池的线程工厂。常用来设置每个线程的名字。默认名字是 <code>pool-1-thread-1</code>，一般默认为<code>Executors.defaultThreadFactory()</code>即可，当然，ThreadPoolExecutor类的构造方法最终都是传入<code>DefaultThreadFactory</code></li>
-<li><code>RejectedExecutionHandler</code>：饱和策略。当任务队列和线程池都达到最大值时的处理策略。默认是无法处理新的任务的<code>AbortPolicy</code>。比如上面第二节console输出的是<code>AbortPolicy</code>策略。那是因为创建的最大线程数是5，任务队列是5，那么线程池中会存在10个线程，而我创建了13个线程的同时超过了10个线程，接着就会抛出这个<code>RejectedExecutionHandler</code>异常</li>
+<li><figure class="highlight plain"><figcaption><span>```pool-1-thread-1```，一般默认为```Executors.defaultThreadFactory()```即可，当然，ThreadPoolExecutor类的构造方法最终都是传入```DefaultThreadFactory```</span></figcaption><table><tr><td class="code"><pre><span class="line">7. ```RejectedExecutionHandler```：饱和策略。当任务队列和线程池都达到最大值时的处理策略。默认是无法处理新的任务的```AbortPolicy```。比如上面第二节console输出的是```AbortPolicy```策略。那是因为创建的最大线程数是5，任务队列是5，那么线程池中会存在10个线程，而我创建了13个线程的同时超过了10个线程，接着就会抛出这个```RejectedExecutionHandler```异常</span><br><span class="line"></span><br><span class="line">###### 1. 线程池的处理过程</span><br><span class="line"></span><br><span class="line">拿第二节创建的线程池来举例，核心线程是2，最大线程数是5（说明非核心线程数为3）。任务队列是ArrayBlockingQueue（特点是它用数组实现，元素排序规则是先进先出，默认不保证线程池按照阻塞的先后顺序访问队列），数量为5个，超时为6秒，其他都为默认。</span><br><span class="line"></span><br><span class="line">那么，其实内部是这样的--------&gt;看图:</span><br><span class="line"></span><br><span class="line">1. 核心线程未饱和</span><br><span class="line">![核心线程未饱和.gif](https://upload-images.jianshu.io/upload_images/3515789-b4a321c33910abec.gif?imageMogr2/auto-orient/strip)</span><br><span class="line">当只有1核心线程时，这时新建的任务会直接添加为核心线程</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">2. 核心线程饱和队列未饱和</span><br><span class="line">![核心线程饱和队列未饱和.gif](https://upload-images.jianshu.io/upload_images/3515789-82e987f0ca11a208.gif?imageMogr2/auto-orient/strip)</span><br><span class="line">当核心线程已满，任务队列未饱和时，这时新建的任务会添加到工作队列</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">3. 核心线程饱和队列饱和非核心线程未饱和</span><br><span class="line">![核心线程饱和队列饱和非核心线程未饱和.gif](https://upload-images.jianshu.io/upload_images/3515789-471b1c192a834240.gif?imageMogr2/auto-orient/strip)</span><br><span class="line">当核心线程已满，任务队列已饱和，非核心线程未饱和时，新建的任务会添加为非核心线程。</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">4. 核心线程饱和队列饱和非核心线程饱和</span><br><span class="line">![核心线程饱和队列饱和非核心线程饱和.gif](https://upload-images.jianshu.io/upload_images/3515789-2fae49209fbdea7a.gif?imageMogr2/auto-orient/strip)</span><br><span class="line"></span><br><span class="line">当线程池线程已达最大值，队列也已饱和，这时新建任务会执行饱和策略</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">**总结起来，其实就是：**</span><br><span class="line"></span><br><span class="line">![线程池执行流程.png](https://upload-images.jianshu.io/upload_images/3515789-83b471856880e85f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">这里很懵逼的是阻塞队列，事实上不是每个阻塞队列都像```ArrayBlockingQueue```如此，下节将分析常用的阻塞队列</span><br><span class="line"></span><br><span class="line"># 四、常见阻塞队列及使用场景</span><br><span class="line"></span><br><span class="line">阻塞队列使用方法大同小异，只要了解他的内部结构构成，以及由其结构影响的各种特性即可，具体测试及用法可看</span><br><span class="line">[BlockingQueue（阻塞队列）详解](https://www.cnblogs.com/tjudzj/p/4454490.html)、</span><br><span class="line">[深入理解阻塞队列（二）——ArrayBlockingQueue源码分析](https://blog.csdn.net/qq_19431333/article/details/72864017)、</span><br><span class="line">[深入理解阻塞队列（三）——LinkedBlockingQueue源码分析](https://blog.csdn.net/qq_19431333/article/details/73087366)</span><br><span class="line"></span><br><span class="line">常用的几种阻塞队列如下：</span><br><span class="line">- ArrayBlockingQueue：有界阻塞队列，它用数组实现，**元素排序规则是先进先出**，默认不保证线程池按照阻塞的先后顺序访问队列，一般构造方法会指定元素数量，和是否公平顺序按照阻塞顺序访问队列，通常用在需要生产者和消费者顺序的操作队列中的数据，以降低吞吐量的时候，比如</span><br><span class="line">- LinkedBlockingQueue：有界阻塞队列，链表实现，与ArrayBlockingQueue区别不同，**它是并行的操作队列中的数据**，这也决定了它能用于高并发，巨大吞吐量的情况，需要注意的是，LinkedBlockingQueue的容量记得要指定哦，不然太大了加入生产者的速度大于消费者，那么队列阻塞可能不会阻塞，因为内存会炸。</span><br><span class="line">- SyschronousQueue：**不存储元素的异步队列，有个特点，插入操作的完成要等待另一个线程的对应移除操作**，适合那种立即处理且耗时较少的任务。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 五、比较Executors中3种线程池的区别和使用情景</span><br><span class="line"></span><br><span class="line">其实不止3种（有6种），这里只分析其中常用的4种，其他的大同小异</span><br><span class="line"></span><br><span class="line">1. ```FixedThreadPool```:固定线程数的线程池，特点在核心线程和线程最大数量相等，意味着只有核心线程，keepAliveTime时间为0说明多余线程马上停止，队列它用的是```new LinkedBlockingQueue&lt;Runnable&gt;()```，这里源码点进去看发现指定队列容量为无穷大。总结的说，就是**线程池大小固定，任务队列无界**</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<h6 id="1-线程池的处理过程"><a href="#1-线程池的处理过程" class="headerlink" title="1. 线程池的处理过程"></a>1. 线程池的处理过程</h6><p>拿第二节创建的线程池来举例，核心线程是2，最大线程数是5（说明非核心线程数为3）。任务队列是ArrayBlockingQueue（特点是它用数组实现，元素排序规则是先进先出，默认不保证线程池按照阻塞的先后顺序访问队列），数量为5个，超时为6秒，其他都为默认。</p>
-<p>那么，其实内部是这样的——–&gt;看图:</p>
-<ol>
-<li>核心线程未饱和<br><img src="https://upload-images.jianshu.io/upload_images/3515789-b4a321c33910abec.gif?imageMogr2/auto-orient/strip" alt="核心线程未饱和.gif"><br>当只有1核心线程时，这时新建的任务会直接添加为核心线程</li>
-</ol>
-<hr>
-<ol start="2">
-<li>核心线程饱和队列未饱和<br><img src="https://upload-images.jianshu.io/upload_images/3515789-82e987f0ca11a208.gif?imageMogr2/auto-orient/strip" alt="核心线程饱和队列未饱和.gif"><br>当核心线程已满，任务队列未饱和时，这时新建的任务会添加到工作队列</li>
-</ol>
-<hr>
-<ol start="3">
-<li>核心线程饱和队列饱和非核心线程未饱和<br><img src="https://upload-images.jianshu.io/upload_images/3515789-471b1c192a834240.gif?imageMogr2/auto-orient/strip" alt="核心线程饱和队列饱和非核心线程未饱和.gif"><br>当核心线程已满，任务队列已饱和，非核心线程未饱和时，新建的任务会添加为非核心线程。</li>
-</ol>
-<hr>
-<ol start="4">
-<li>核心线程饱和队列饱和非核心线程饱和<br><img src="https://upload-images.jianshu.io/upload_images/3515789-2fae49209fbdea7a.gif?imageMogr2/auto-orient/strip" alt="核心线程饱和队列饱和非核心线程饱和.gif"></li>
-</ol>
-<p>当线程池线程已达最大值，队列也已饱和，这时新建任务会执行饱和策略</p>
-<hr>
-<p><strong>总结起来，其实就是：</strong></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/3515789-83b471856880e85f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="线程池执行流程.png"></p>
-<hr>
-<p>这里很懵逼的是阻塞队列，事实上不是每个阻塞队列都像<code>ArrayBlockingQueue</code>如此，下节将分析常用的阻塞队列</p>
-<h1 id="四、常见阻塞队列及使用场景"><a href="#四、常见阻塞队列及使用场景" class="headerlink" title="四、常见阻塞队列及使用场景"></a>四、常见阻塞队列及使用场景</h1><p>阻塞队列使用方法大同小异，只要了解他的内部结构构成，以及由其结构影响的各种特性即可，具体测试及用法可看<br><a href="https://www.cnblogs.com/tjudzj/p/4454490.html" target="_blank" rel="noopener">BlockingQueue（阻塞队列）详解</a>、<br><a href="https://blog.csdn.net/qq_19431333/article/details/72864017" target="_blank" rel="noopener">深入理解阻塞队列（二）——ArrayBlockingQueue源码分析</a>、<br><a href="https://blog.csdn.net/qq_19431333/article/details/73087366" target="_blank" rel="noopener">深入理解阻塞队列（三）——LinkedBlockingQueue源码分析</a></p>
-<p>常用的几种阻塞队列如下：</p>
+<p>/**</p>
+<pre><code> * Creates a thread pool that reuses a fixed number of threads
+ * operating off a shared unbounded queue.  At any point, at most
+ * {@code nThreads} threads will be active processing tasks.
+ * If additional tasks are submitted when all threads are active,
+ * they will wait in the queue until a thread is available.
+ * If any thread terminates due to a failure during execution
+ * prior to shutdown, a new one will take its place if needed to
+ * execute subsequent tasks.  The threads in the pool will exist
+ * until it is explicitly {@link ExecutorService#shutdown shutdown}.
+ *
+ * @param nThreads the number of threads in the pool
+ * @return the newly created thread pool
+ * @throws IllegalArgumentException if {@code nThreads &lt;= 0}
+ */
+public static ExecutorService newFixedThreadPool(int nThreads) {
+    return new ThreadPoolExecutor(nThreads, nThreads,
+                                  0L, TimeUnit.MILLISECONDS,
+                                  new LinkedBlockingQueue&lt;Runnable&gt;());
+}
+</code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 应用场景：保证所有任务都会被执行，永远不拒绝新任务。但是假如任务时间无限长的时候会出现由于队列数量过大引起的内存问题。</span><br><span class="line">2.  ```CacheThreadPool```:核心线程为0，线程最大值为无穷大，说明</span><br><span class="line">非核心线程数是无穷大的，空闲线程等待新任务的时间是60s。这里阻塞队列用的是```new SynchronousQueue&lt;Runnable&gt;()```说明每个插入和移除操作要同步进行。总结的说，就是**线程池无心大，等待长度为1**（因为阻塞队列的原因）</span><br></pre></td></tr></table></figure>
+<pre><code>/**
+ * Creates a thread pool that creates new threads as needed, but
+ * will reuse previously constructed threads when they are
+ * available.  These pools will typically improve the performance
+ * of programs that execute many short-lived asynchronous tasks.
+ * Calls to {@code execute} will reuse previously constructed
+ * threads if available. If no existing thread is available, a new
+ * thread will be created and added to the pool. Threads that have
+ * not been used for sixty seconds are terminated and removed from
+ * the cache. Thus, a pool that remains idle for long enough will
+ * not consume any resources. Note that pools with similar
+ * properties but different details (for example, timeout parameters)
+ * may be created using {@link ThreadPoolExecutor} constructors.
+ *
+ * @return the newly created thread pool
+ */
+public static ExecutorService newCachedThreadPool() {
+    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                  60L, TimeUnit.SECONDS,
+                                  new SynchronousQueue&lt;Runnable&gt;());
+}
+</code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 应用场景：适合大量的需要立即处理并且耗时较少的的任务</span><br><span class="line">3. ```SingleThreadPool```:核心线程和最大线程数都为0，也就是说SingleThreadPool只有一个核心线程，后面的等待时间队列都和FixedThreadPool一样。总结的说，就是**线程池大小固定为1，任务队列无界**。</span><br></pre></td></tr></table></figure>
+<p>/**</p>
+<pre><code> * Creates an Executor that uses a single worker thread operating
+ * off an unbounded queue. (Note however that if this single
+ * thread terminates due to a failure during execution prior to
+ * shutdown, a new one will take its place if needed to execute
+ * subsequent tasks.)  Tasks are guaranteed to execute
+ * sequentially, and no more than one task will be active at any
+ * given time. Unlike the otherwise equivalent
+ * {@code newFixedThreadPool(1)} the returned executor is
+ * guaranteed not to be reconfigurable to use additional threads.
+ *
+ * @return the newly created single-threaded Executor
+ */
+public static ExecutorService newSingleThreadExecutor() {
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue&lt;Runnable&gt;()));
+}
+</code></pre><p><code>`</code></p>
 <ul>
-<li>ArrayBlockingQueue：有界阻塞队列，它用数组实现，<strong>元素排序规则是先进先出</strong>，默认不保证线程池按照阻塞的先后顺序访问队列，一般构造方法会指定元素数量，和是否公平顺序按照阻塞顺序访问队列，通常用在需要生产者和消费者顺序的操作队列中的数据，以降低吞吐量的时候，比如</li>
-<li>LinkedBlockingQueue：有界阻塞队列，链表实现，与ArrayBlockingQueue区别不同，<strong>它是并行的操作队列中的数据</strong>，这也决定了它能用于高并发，巨大吞吐量的情况，需要注意的是，LinkedBlockingQueue的容量记得要指定哦，不然太大了加入生产者的速度大于消费者，那么队列阻塞可能不会阻塞，因为内存会炸。</li>
-<li>SyschronousQueue：<strong>不存储元素的异步队列，有个特点，插入操作的完成要等待另一个线程的对应移除操作</strong>，适合那种立即处理且耗时较少的任务。</li>
+<li>应用场景：它的特性保证所有了所有的任务在一个线程中按顺序运行。所以它<strong>适用于在逻辑上需要单线程处理任务的场景</strong>。由于阻塞队列无限大，同样可能会出现FixedThreadPool的耗时过长时产生的内存问题。</li>
 </ul>
-<p>#五、比较Executors中4种线程池的区别和使用情景</p>
-<p>2018-04-08 11:41PM<br>更新中…</p>
+<p>2018-04-16 06:05AM<br>更新中…</p>
 
-        
-      </div>
-      
-      
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/19/EventBus源码分析/" rel="next" title="EventBus源码分析">
+                <i class="fa fa-chevron-left"></i> EventBus源码分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/19/Android性能优化之内存优化/" rel="prev" title="Android性能优化之内存优化">
+                Android性能优化之内存优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -400,7 +538,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -453,7 +591,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池与Android的日日夜夜"><span class="nav-number">1.</span> <span class="nav-text">线程池与Android的日日夜夜</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">2.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-先从最基本的线程开始"><span class="nav-number">3.</span> <span class="nav-text">一 先从最基本的线程开始</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#先重新了解一下，创建线程的三种方法："><span class="nav-number">3.0.0.0.0.1.</span> <span class="nav-text">先重新了解一下，创建线程的三种方法：</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、一个最基本的线程池用例"><span class="nav-number">4.</span> <span class="nav-text">二、一个最基本的线程池用例</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-线程池的处理过程"><span class="nav-number">4.0.0.0.0.1.</span> <span class="nav-text">1. 线程池的处理过程</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、常见阻塞队列及使用场景"><span class="nav-number">5.</span> <span class="nav-text">四、常见阻塞队列及使用场景</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池与Android的日日夜夜"><span class="nav-number">1.</span> <span class="nav-text">线程池与Android的日日夜夜</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录"><span class="nav-number">2.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-先从最基本的线程开始"><span class="nav-number">3.</span> <span class="nav-text">一 先从最基本的线程开始</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#先重新了解一下，创建线程的三种方法："><span class="nav-number">3.0.0.0.0.1.</span> <span class="nav-text">先重新了解一下，创建线程的三种方法：</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、一个最基本的线程池用例"><span class="nav-number">4.</span> <span class="nav-text">二、一个最基本的线程池用例</span></a></li></ol></div>
             
 
           </div>
