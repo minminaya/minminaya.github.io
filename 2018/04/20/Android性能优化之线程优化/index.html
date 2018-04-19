@@ -79,16 +79,19 @@
 
 
 
-<meta name="description" content="啊！你来啦！">
-<meta property="og:type" content="website">
-<meta property="og:title" content="minminaya">
-<meta property="og:url" content="http://hexo.minminaya.cn/archives/index.html">
+<meta name="description" content="不能通过非UI线程对View进行操作。因为Android的UI不是安全的，如果View能被不同的线程所访问或修改，那么就可能在程序的执行期间，产生不可预期的行为或者并发错误。 使用线程时，避免在循坏中使用同步，因为获取和释放锁的操作代价很大。会引起CPU资源的损耗。 处理多线程以及线程间通信时，使用HandlerThread来操作，它内部包装了Looper，记得不用的时候退出/释放资源哦。 当">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android性能优化之线程优化">
+<meta property="og:url" content="http://hexo.minminaya.cn/2018/04/20/Android性能优化之线程优化/index.html">
 <meta property="og:site_name" content="minminaya">
-<meta property="og:description" content="啊！你来啦！">
+<meta property="og:description" content="不能通过非UI线程对View进行操作。因为Android的UI不是安全的，如果View能被不同的线程所访问或修改，那么就可能在程序的执行期间，产生不可预期的行为或者并发错误。 使用线程时，避免在循坏中使用同步，因为获取和释放锁的操作代价很大。会引起CPU资源的损耗。 处理多线程以及线程间通信时，使用HandlerThread来操作，它内部包装了Looper，记得不用的时候退出/释放资源哦。 当">
 <meta property="og:locale" content="zh">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3515789-83e9aa2f38822d98.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-04-19T17:18:50.848Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="minminaya">
-<meta name="twitter:description" content="啊！你来啦！">
+<meta name="twitter:title" content="Android性能优化之线程优化">
+<meta name="twitter:description" content="不能通过非UI线程对View进行操作。因为Android的UI不是安全的，如果View能被不同的线程所访问或修改，那么就可能在程序的执行期间，产生不可预期的行为或者并发错误。 使用线程时，避免在循坏中使用同步，因为获取和释放锁的操作代价很大。会引起CPU资源的损耗。 处理多线程以及线程间通信时，使用HandlerThread来操作，它内部包装了Looper，记得不用的时候退出/释放资源哦。 当">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/3515789-83e9aa2f38822d98.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -118,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://hexo.minminaya.cn/archives/"/>
+  <link rel="canonical" href="http://hexo.minminaya.cn/2018/04/20/Android性能优化之线程优化/"/>
 
 
 
 
 
-  <title>Archive | minminaya</title>
+  <title>Android性能优化之线程优化 | minminaya</title>
   
 
 
@@ -143,7 +146,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,222 +230,176 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/20/Android性能优化之线程优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="minminaya">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="minminaya">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Android性能优化之线程优化</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-20T01:17:22+08:00">
+                2018-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        Um..! 5 posts in total. Keep on posting.
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/20/Android性能优化之线程优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/04/20/Android性能优化之线程优化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-        
+          
+          
+             <span id="/2018/04/20/Android性能优化之线程优化/" class="leancloud_visitors" data-flag-title="Android性能优化之线程优化">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/20/Android性能优化之线程优化/" itemprop="url">
-              
-                <span itemprop="name">Android性能优化之线程优化</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-20T01:17:22+08:00"
-              content="2018-04-20" >
-          04-20
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/19/Android性能优化之布局优化/" itemprop="url">
-              
-                <span itemprop="name">Android性能优化之布局优化</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-19T03:29:22+08:00"
-              content="2018-04-19" >
-          04-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/19/Android性能优化之内存优化/" itemprop="url">
-              
-                <span itemprop="name">Android性能优化之内存优化</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-19T03:27:18+08:00"
-              content="2018-04-19" >
-          04-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/19/线程池与Android的日日夜夜/" itemprop="url">
-              
-                <span itemprop="name">线程池与Android的日日夜夜</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-19T03:25:18+08:00"
-              content="2018-04-19" >
-          04-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p><img src="https://upload-images.jianshu.io/upload_images/3515789-83e9aa2f38822d98.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<ol>
+<li>不能通过非UI线程对View进行操作。因为Android的UI不是安全的，如果View能被不同的线程所访问或修改，那么就可能在程序的执行期间，产生不可预期的行为或者并发错误。</li>
+<li>使用线程时，避免在循坏中使用同步，因为获取和释放锁的操作代价很大。会引起CPU资源的损耗。</li>
+<li>处理多线程以及线程间通信时，使用<code>HandlerThread</code>来操作，它内部包装了Looper，记得不用的时候退出/释放资源哦。</li>
+<li>当工作线程与UI线程之间通信的时候，推荐使用AsyncTask（Android 7.0后内部任务变成串行处理，不再会出现以前并行时超过任务数执行饱和策略的情况）</li>
+<li>Loader可以用来代替AsyncTask的某些情况，因为Loader的生命周期是独立的（与Application Context有关），当Activity/Fragment销毁重建时，它仍然在，而且它特别使用异步操作，比如AsyncTaskLoader代替AsyncTask也可以实现后者的功能，但是生命周期完全独立于Activity。切记Loader使用完记得销毁。</li>
+<li>当你的Service不需要交互时，请使用可以自动停止的IntentService。</li>
+<li>当你希望延长BroadcastReceiver的生命周期时，例如启动一个后台线程IntentService。在onReceiver中调用<code>BroadcastReceiver.goAsync()</code>，它会返回一个PendingResult对象，这时，广播接收器的生命周期会延长持续到<code>PendingResult.finish()</code>方法调用。</li>
+<li>线程池最好用构造方法手动创建，而不要用Executors来直接调用工厂方法，这样利于明白线程池的运行规则，避免用了错误的线程池导致资源耗尽。</li>
+<li>给线程一个好听的名字，调试时候用。</li>
+<li>线程池设置线程的存活时间，以保证空闲线程准确释放。</li>
+</ol>
+<hr>
+<p>End</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/19/EventBus源码分析/" itemprop="url">
-              
-                <span itemprop="name">EventBus源码分析</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-19T03:22:18+08:00"
-              content="2018-04-19" >
-          04-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/19/Android性能优化之布局优化/" rel="next" title="Android性能优化之布局优化">
+                <i class="fa fa-chevron-left"></i> Android性能优化之布局优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -450,6 +407,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -700,6 +664,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
