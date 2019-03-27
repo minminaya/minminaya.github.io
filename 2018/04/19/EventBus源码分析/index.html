@@ -6,10 +6,10 @@
 
 
 <html class="theme-next mist use-motion" lang="zh">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpg?v=5.1.4">
@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -123,7 +123,7 @@
 
 
 
-  <link rel="canonical" href="http://hexo.minminaya.cn/2018/04/19/EventBus源码分析/"/>
+  <link rel="canonical" href="http://hexo.minminaya.cn/2018/04/19/EventBus源码分析/">
 
 
 
@@ -157,7 +157,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">minminaya</span>
         <span class="logo-line-after"><i></i></span>
@@ -187,7 +187,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             Home
           </a>
@@ -197,7 +197,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             Archives
           </a>
@@ -207,7 +207,7 @@
         <li class="menu-item menu-item-about">
           <a href="https://github.com/minminaya" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             About
           </a>
@@ -250,7 +250,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="minminaya">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
@@ -335,7 +335,7 @@
 
       
         <p>好久没写博文了，这几个月复习了很多东西，新年在老家闲的慌啊，我这么爱学习的人只能学习了哈啊哈哈哈哈哈哈（滑稽脸）。顺便总结总结一些容易忘的东西。</p>
-<p>EventBus的使用相信大家都使的贼溜了。实在不行看<a href="http://greenrobot.org/eventbus/" target="_blank" rel="noopener">文档</a>嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至改进轮子都有令人窒息的好处。<br><img src="http://upload-images.jianshu.io/upload_images/3515789-8193ca0b3fd0d578.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>EventBus的使用相信大家都使的贼溜了。实在不行看<a href="http://greenrobot.org/eventbus/" target="_blank" rel="noopener">文档</a>嘛。本文只要是分析下EventBus的源码执行过程，分析分析设计的思路，这样对使用和深入学习甚至改进轮子都有令人窒息的好处。<br><img src="http://upload-images.jianshu.io/upload_images/3515789-8193ca0b3fd0d578.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
 <hr>
 <p>这张是EventBus官网档下来的哈哈哈哈哈！</p>
 <p>很明显啦，EventBus用的观察者模式，Publisher作为事件发布者（被观察者）把Event发布到中转服务站EventBus，EventBus把Event传给Subscriber事件订阅者（观察者）并且唤醒了它。<br><img src="http://upload-images.jianshu.io/upload_images/3515789-108c18b81e28d566.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
@@ -490,9 +490,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.jpg"
-                alt="minminaya" />
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="minminaya">
             
               <p class="site-author-name" itemprop="name">minminaya</p>
               <p class="site-description motion-element" itemprop="description">啊！你来啦！</p>
@@ -590,7 +588,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-EventBus结构"><span class="nav-number">1.</span> <span class="nav-text">一. EventBus结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-构造方法"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 构造方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-订阅者注册"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. 订阅者注册</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-发送事件"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. 发送事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-根据不同线程参数等处理事件（用反射运行目标方法）"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. 根据不同线程参数等处理事件（用反射运行目标方法）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-订阅者取消注册"><span class="nav-number">1.0.5.</span> <span class="nav-text">5. 订阅者取消注册</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-EventBus结构"><span class="nav-number">1.</span> <span class="nav-text">一. EventBus结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-构造方法"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 构造方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-订阅者注册"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. 订阅者注册</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-发送事件"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. 发送事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-根据不同线程参数等处理事件（用反射运行目标方法）"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. 根据不同线程参数等处理事件（用反射运行目标方法）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-订阅者取消注册"><span class="nav-number">1.0.5.</span> <span class="nav-text">5. 订阅者取消注册</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a></li></div>
             
 
           </div>
@@ -633,10 +631,10 @@
 
 
   <div class="footer-custom"><p>Hosted by <a href="https://pages.coding.me">Coding Pages</a></p></div>
-<div class=BbeiAn-info">
+<div class="BbeiAn-info"">
   冀ICP备 -
   <a href="http://www.miitbeian.gov.cn/">16009379号-1</a>
-  </a>
+  
 </div>
 
 
