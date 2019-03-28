@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/avatar.jpg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、常见保活方案 1、监听广播：监听全局的静态广播，比如时间更新的广播、开机广播、解锁屏、网络状态、解锁加锁亮屏暗屏（3.1版本），高版本需要应用开机后运行一次才能监听这些系统广播，目前此方案失效。可以更换思路，做APP启动后的保活（监听广播启动保活的前台服务）  2、定时器、JobScheduler：假如应用被系统杀死，那么定时器则失效，此方案失效。JobService在5.0,5.1,6.0作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2018年Android的保活方案效果统计">
+<meta property="og:url" content="http://hexo.minminaya.cn/2018/04/20/2018年Android的保活方案效果统计/index.html">
+<meta property="og:site_name" content="minminaya">
+<meta property="og:description" content="一、常见保活方案 1、监听广播：监听全局的静态广播，比如时间更新的广播、开机广播、解锁屏、网络状态、解锁加锁亮屏暗屏（3.1版本），高版本需要应用开机后运行一次才能监听这些系统广播，目前此方案失效。可以更换思路，做APP启动后的保活（监听广播启动保活的前台服务）  2、定时器、JobScheduler：假如应用被系统杀死，那么定时器则失效，此方案失效。JobService在5.0,5.1,6.0作">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2019-03-28T14:43:55.580Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2018年Android的保活方案效果统计">
+<meta name="twitter:description" content="一、常见保活方案 1、监听广播：监听全局的静态广播，比如时间更新的广播、开机广播、解锁屏、网络状态、解锁加锁亮屏暗屏（3.1版本），高版本需要应用开机后运行一次才能监听这些系统广播，目前此方案失效。可以更换思路，做APP启动后的保活（监听广播启动保活的前台服务）  2、定时器、JobScheduler：假如应用被系统杀死，那么定时器则失效，此方案失效。JobService在5.0,5.1,6.0作">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://hexo.minminaya.cn/2018/04/20/2018年Android的保活方案效果统计/">
+
+
+
+
+
+  <title>2018年Android的保活方案效果统计 | minminaya</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">minminaya</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://github.com/minminaya" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hexo.minminaya.cn/2018/04/20/2018年Android的保活方案效果统计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="minminaya">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="minminaya">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2018年Android的保活方案效果统计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-20T10:12:18+08:00">
+                2018-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/20/2018年Android的保活方案效果统计/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/04/20/2018年Android的保活方案效果统计/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/04/20/2018年Android的保活方案效果统计/" class="leancloud_visitors" data-flag-title="2018年Android的保活方案效果统计">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="一、常见保活方案"><a href="#一、常见保活方案" class="headerlink" title="一、常见保活方案"></a>一、常见保活方案</h4><ul>
+<li><p>1、监听广播：监听全局的静态广播，比如时间更新的广播、开机广播、解锁屏、网络状态、解锁加锁亮屏暗屏（3.1版本），高版本需要应用开机后运行一次才能监听这些系统广播，目前此方案失效。可以更换思路，做APP启动后的保活（监听广播启动保活的前台服务）</p>
+</li>
+<li><p>2、定时器、JobScheduler：假如应用被系统杀死，那么定时器则失效，此方案失效。JobService在5.0,5.1,6.0作用很大，7.0时候有一定影响（可以在电源管理中给APP授权）</p>
+</li>
+<li><p>3、双进程（NDK方式Fork子进程）、双Service守护：高版本已失效，5.0起系统回收策略改成进程组。双Service方案也改成了应用被杀，任何后台Service无法正常状态运行</p>
+</li>
+<li><p>4、提高Service优先级：只能一定程度上缓解Service被立马回收</p>
+</li>
+</ul>
+<hr>
+<h4 id="二、保活"><a href="#二、保活" class="headerlink" title="二、保活"></a>二、保活</h4><ul>
+<li>1、AIDL方式单进程、双进程方式保活Service</li>
+<li>2、降低oom_adj的值：常驻通知栏（可通过启动另外一个服务关闭Notification，不对oom_adj值有影响）、使用”1像素“的Activity覆盖在getWindow()的view上、循环播放无声音频（黑科技，7.0下杀不掉）</li>
+<li>3、监听锁屏广播：使Activity始终保持前台</li>
+<li>4、使用自定义锁屏界面：覆盖了系统锁屏界面。</li>
+<li>5、通过android:process属性来为Service创建一个进程</li>
+<li>6、跳转到系统白名单界面让用户自己添加app进入白名单</li>
+</ul>
+<hr>
+<h4 id="三、复活"><a href="#三、复活" class="headerlink" title="三、复活"></a>三、复活</h4><ul>
+<li>1、JobScheduler：原理类似定时器，5.0,5.1,6.0作用很大，7.0时候有一定影响（可以在电源管理中给APP授权）</li>
+<li>2、推送互相唤醒复活：极光、友盟、以及各大厂商的推送</li>
+<li>3、同派系APP广播互相唤醒：比如今日头条系、阿里系</li>
+</ul>
+<hr>
+<h2 id="方案实现效果统计"><a href="#方案实现效果统计" class="headerlink" title="方案实现效果统计"></a>方案实现效果统计</h2><h4 id="1、双进程守护方案（基于onStartCommand-return-START-STICKY）"><a href="#1、双进程守护方案（基于onStartCommand-return-START-STICKY）" class="headerlink" title="1、双进程守护方案（基于onStartCommand() return START_STICKY）"></a>1、双进程守护方案（基于onStartCommand() return START_STICKY）</h4><ul>
+<li>1、原生5.0、5.1：原生任务栏滑动清理app，Service会被杀掉，然后被拉起，接着一直存活</li>
+<li>2、金立F100(5.1)：一键清理直接杀掉整个app，包括双守护进程。不手动清理情况下，经测试能锁屏存活至少40分钟</li>
+<li>3、华为畅享5x（6.0）：一键清理直接杀掉整个app，包括双守护进程。不手动清理下，锁屏只存活10s。结论：双进程守护方案失效。</li>
+<li>4、美图m8s(7.1.1)：一键清理直接杀掉整个app，包括双守护进程。不清理情况下，锁屏会有被杀过程（9分钟左右被杀），之后重新复活，之后不断被干掉然后又重新复活。结论：双守护进程可在后台不断拉起Service。</li>
+<li>5、原生7.0：任务栏清除APP后，Service存活。使用此方案后Service照样存活。</li>
+<li>6、LG V30+(7.1.2)：不加双进程守护的时候，一键清理无法杀掉服务。加了此方案之后也不能杀掉服务，锁屏存活（测试观察大于50分钟）</li>
+<li>7、小米8(8.1)：一键清理直接干掉app并且包括双守护进程。不清理情况下，不加守护进程方案与加守护进程方案Service会一直存活，12分钟左右closed。结论：此方案没有起作用</li>
+</ul>
+<p><strong>结论</strong>：除了华为此方案无效以及未更改底层的厂商不起作用外（START_STICKY字段就可以保持Service不被杀）。<strong>此方案可以与其他方案混合使用</strong></p>
+<h4 id="2、监听锁屏广播打开1像素Activity（基于onStartCommand-return-START-STICKY）"><a href="#2、监听锁屏广播打开1像素Activity（基于onStartCommand-return-START-STICKY）" class="headerlink" title="2、监听锁屏广播打开1像素Activity（基于onStartCommand() return START_STICKY）"></a>2、监听锁屏广播打开1像素Activity（基于onStartCommand() return START_STICKY）</h4><ul>
+<li>1、原生5.0、5.1：锁屏后3s服务被干掉然后重启（START_STICKY字段起作用）</li>
+<li>2、华为畅享5x（6.0）：锁屏只存活4s。结论：方案失效。</li>
+<li>3、美图m8s(7.1.1)：同原生5.0</li>
+<li>4、原生7.0：同美图m8s。</li>
+<li>5、LG V30+(7.1.2)：锁屏后情况跟不加情况一致，服务一致保持运行，结论：此方案不起作用</li>
+<li>6、小米8(8.1)：关屏过2s之后app全部被干掉。结论：此方案没有起作用</li>
+</ul>
+<p><strong>结论</strong>：<strong>此方案无效果</strong></p>
+<h4 id="3、故意在后台播放无声的音乐（基于onStartCommand-return-START-STICKY）"><a href="#3、故意在后台播放无声的音乐（基于onStartCommand-return-START-STICKY）" class="headerlink" title="3、故意在后台播放无声的音乐（基于onStartCommand() return START_STICKY）"></a>3、故意在后台播放无声的音乐（基于onStartCommand() return START_STICKY）</h4><ul>
+<li>1、原生5.0、5.1：锁屏后3s服务被干掉然后重启（START_STICKY字段起作用）</li>
+<li>2、华为畅享5x（6.0）：一键清理后服务依然存活，需要单独清理才可杀掉服务，锁屏8分钟后依然存活。结论：此方案适用</li>
+<li>3、美图m8s(7.1.1)：同5.0</li>
+<li>4、原生7.0：任务管理器中关闭APP后服务被干掉，大概过3s会重新复活（同仅START_STICKY字段模式）。结论：看不出此方案有没有其作用</li>
+<li>5、LG V30+(7.1.2)：使用此方案前后效果一致。结论：此方案不起作用</li>
+<li>6、小米8(8.1)：一键清理可以杀掉服务。锁屏后保活超过20分钟</li>
+</ul>
+<p><strong>结论</strong>：成功对华为手机保活。小米8下也成功突破20分钟</p>
+<h4 id="4、使用JobScheduler唤醒Service（基于onStartCommand-return-START-STICKY）"><a href="#4、使用JobScheduler唤醒Service（基于onStartCommand-return-START-STICKY）" class="headerlink" title="4、使用JobScheduler唤醒Service（基于onStartCommand() return START_STICKY）"></a>4、使用JobScheduler唤醒Service（基于onStartCommand() return START_STICKY）</h4><ul>
+<li>1、原生5.0、5.1：任务管理器中干掉APP，服务会在周期时间后重新启动。结论：此方案起作用</li>
+<li>2、华为畅享5x（6.0）：一键清理直接杀掉APP，过12s左右会自动重启服务，JobScheduler起作用</li>
+<li>3、美图m8s(7.1.1)：一键清理直接杀掉APP，无法自动重启</li>
+<li>4、原生7.0：同美图m8s(7.1.1)</li>
+<li>5、小米8(8.1)：同美图m8s(7.1.1)</li>
+</ul>
+<p><strong>结论</strong>：只对5.0，5.1、6.0起作用</p>
+<h4 id="5、混合使用的效果，并且在通知栏弹出通知"><a href="#5、混合使用的效果，并且在通知栏弹出通知" class="headerlink" title="5、混合使用的效果，并且在通知栏弹出通知"></a>5、混合使用的效果，并且在通知栏弹出通知</h4><ul>
+<li>1、原生5.0、5.1：任务管理器中干掉APP，服务会在周期时间后重新启动。锁屏超过11分钟存活</li>
+<li>2、华为畅享5x（6.0）：一键清理后服务依然存活，需要单独清理才可杀掉服务。结论：方案适用。</li>
+<li>3、美图m8s(7.1.1)：一键清理APP会被杀掉。正常情况下锁屏后服务依然存活。</li>
+<li>4、原生7.0：任务管理器中关闭APP后服务被干掉，过2s会重新复活</li>
+<li>5、小米8(8.1)：一键清理可以杀掉服务，锁屏下后台保活时间超过38分钟</li>
+<li>6、荣耀10（8.0）：一键清理杀掉服务，锁屏下后台保活时间超过23分钟</li>
+</ul>
+<p><strong>结论：高版本情况下可以使用弹出通知栏、双进程、无声音乐提高后台服务的保活概率</strong></p>
+<hr>
+<h2 id="实现具体过程"><a href="#实现具体过程" class="headerlink" title="实现具体过程"></a>实现具体过程</h2><h6 id="一、双进程实现方案"><a href="#一、双进程实现方案" class="headerlink" title="一、双进程实现方案"></a>一、双进程实现方案</h6><pre><code>使用AIDL绑定方式新建2个Service优先级（防止服务同时被系统杀死）不一样的守护进程互相拉起对方，并在每一个守护进程的<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 1、新建一个AIDL文件```KeepAliveConnection</span><br></pre></td></tr></table></figure>
+</code></pre><figure class="highlight capnproto"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">KeepAliveConnection</span>  </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>2、新建一个服务类<figure class="highlight plain"><figcaption><span>KeepAliveConnection.Stub()```对象，并在```ServiceConnection```的绑定回调中对守护进程服务类```GuardService```的启动和绑定。</span></figcaption><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>/**</p>
+<ul>
+<li>主进程 双进程通讯<br>*</li>
+<li>@author LiGuangMin</li>
+<li><p>@time Created by 2018/8/17 11:26<br>*/<br>public class StepService extends Service {</p>
+<p> private final static String TAG = StepService.class.getSimpleName();<br> private ServiceConnection mServiceConnection = new ServiceConnection() {</p>
+<pre><code>@Override
+public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+    Logger.d(TAG, &quot;StepService:建立链接&quot;);
+    boolean isServiceRunning = ServiceAliveUtils.isServiceAlice();
+    if (!isServiceRunning) {
+        Intent i = new Intent(StepService.this, DownloadService.class);
+        startService(i);
+    }
+}
+
+@Override
+public void onServiceDisconnected(ComponentName componentName) {
+    // 断开链接
+    startService(new Intent(StepService.this, GuardService.class));
+    // 重新绑定
+    bindService(new Intent(StepService.this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+}
+</code></pre><p> };</p>
+<p> @Nullable<br> @Override<br> public IBinder onBind(Intent intent) {</p>
+<pre><code>return new KeepAliveConnection.Stub() {
+};
+</code></pre><p> }</p>
+<p> @Override<br> public int onStartCommand(Intent intent, int flags, int startId) {</p>
+<pre><code>startForeground(1, new Notification());
+// 绑定建立链接
+bindService(new Intent(this, GuardService.class), mServiceConnection, Context.BIND_IMPORTANT);
+return START_STICKY;
+</code></pre><p> }</p>
+</li>
+</ul>
+<p>}<br><figure class="highlight clean"><table><tr><td class="code"><pre><span class="line">- <span class="number">3</span>、对守护进程```GuardService```进行和<span class="number">2</span>一样的处理</span><br></pre></td></tr></table></figure></p>
+<p>/**</p>
+<ul>
+<li>守护进程 双进程通讯<br>*</li>
+<li>@author LiGuangMin</li>
+<li><p>@time Created by 2018/8/17 11:27<br>*/<br>public class GuardService extends Service {<br> private final static String TAG = GuardService.class.getSimpleName();<br> private ServiceConnection mServiceConnection = new ServiceConnection() {</p>
+<pre><code>@Override
+public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+    Logger.d(TAG, &quot;GuardService:建立链接&quot;);
+    boolean isServiceRunning = ServiceAliveUtils.isServiceAlice();
+    if (!isServiceRunning) {
+        Intent i = new Intent(GuardService.this, DownloadService.class);
+        startService(i);
+    }
+}
+
+@Override
+public void onServiceDisconnected(ComponentName componentName) {
+    // 断开链接
+    startService(new Intent(GuardService.this, StepService.class));
+    // 重新绑定
+    bindService(new Intent(GuardService.this, StepService.class), mServiceConnection, Context.BIND_IMPORTANT);
+}
+</code></pre><p> };</p>
+<p> @Nullable<br> @Override<br> public IBinder onBind(Intent intent) {</p>
+<pre><code>return new KeepAliveConnection.Stub() {
+};
+</code></pre><p> }</p>
+<p> @Override<br> public int onStartCommand(Intent intent, int flags, int startId) {</p>
+<pre><code>startForeground(1, new Notification());
+// 绑定建立链接
+bindService(new Intent(this, StepService.class), mServiceConnection, Context.BIND_IMPORTANT);
+return START_STICKY;
+</code></pre><p> }</p>
+</li>
+</ul>
+<p>}</p>
+<figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line"><span class="bullet">- </span>4、在Activity中在启动需要保活的DownloadService服务后然后启动保活的双进程</span><br></pre></td></tr></table></figure>
+<p>public class MainActivity extends AppCompatActivity {<br>    private TextView mShowTimeTv;<br>    private DownloadService.DownloadBinder mDownloadBinder;<br>    private ServiceConnection mServiceConnection = new ServiceConnection() {<br>        @Override<br>        public void onServiceConnected(ComponentName name, IBinder service) {<br>            mDownloadBinder = (DownloadService.DownloadBinder) service;<br>            mDownloadBinder.setOnTimeChangeListener(new DownloadService.OnTimeChangeListener() {<br>                @Override<br>                public void showTime(final String time) {<br>                    runOnUiThread(new Runnable() {<br>                        @Override<br>                        public void run() {<br>                            mShowTimeTv.setText(time);<br>                        }<br>                    });<br>                }<br>            });<br>        }</p>
+<pre><code>    @Override
+    public void onServiceDisconnected(ComponentName name) {
+    }
+};
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    Intent intent = new Intent(this, DownloadService.class);
+    startService(intent);
+    bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    //双守护线程，优先级不一样
+    startAllServices();
+}
+
+@Override
+public void onContentChanged() {
+    super.onContentChanged();
+    mShowTimeTv = findViewById(R.id.tv_show_time);
+}
+
+@Override
+protected void onDestroy() {
+    super.onDestroy();
+    unbindService(mServiceConnection);
+}
+
+/**
+ * 开启所有守护Service
+ */
+private void startAllServices() {
+    startService(new Intent(this, StepService.class));
+    startService(new Intent(this, GuardService.class));
+}
+</code></pre><p>}<br><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"></span><br><span class="line"><span class="comment">###### 二、监听到锁屏广播后使用“1”像素Activity提升优先级</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> <span class="number">1</span><span class="string">、该Activity的View只要设置为1像素然后设置在Window对象上即可。在Activity的onDestroy周期中进行保活服务的存活判断从而唤醒服务。"1像素"Activity如下</span></span><br></pre></td></tr></table></figure></p>
+<p>public class SinglePixelActivity extends AppCompatActivity {<br>    private static final String TAG = SinglePixelActivity.class.getSimpleName();</p>
+<pre><code>@Override
+protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    Window mWindow = getWindow();
+    mWindow.setGravity(Gravity.LEFT | Gravity.TOP);
+    WindowManager.LayoutParams attrParams = mWindow.getAttributes();
+    attrParams.x = 0;
+    attrParams.y = 0;
+    attrParams.height = 1;
+    attrParams.width = 1;
+    mWindow.setAttributes(attrParams);
+    ScreenManager.getInstance(this).setSingleActivity(this);
+}
+
+@Override
+protected void onDestroy() {
+    if (!SystemUtils.isAppAlive(this, Constant.PACKAGE_NAME)) {
+        Intent intentAlive = new Intent(this, DownloadService.class);
+        startService(intentAlive);
+    }
+    super.onDestroy();
+}
+</code></pre><p>}<br><figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="bullet">- </span>2、对广播进行监听，封装为一个ScreenReceiverUtil类，进行锁屏解锁的广播动态注册监听</span><br></pre></td></tr></table></figure></p>
+<p>public class ScreenReceiverUtil {<br>    private Context mContext;<br>    private SreenBroadcastReceiver mScreenReceiver;<br>    private SreenStateListener mStateReceiverListener;</p>
+<pre><code>public ScreenReceiverUtil(Context mContext) {
+    this.mContext = mContext;
+}
+
+public void setScreenReceiverListener(SreenStateListener mStateReceiverListener) {
+    this.mStateReceiverListener = mStateReceiverListener;
+    // 动态启动广播接收器
+    this.mScreenReceiver = new SreenBroadcastReceiver();
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(Intent.ACTION_SCREEN_ON);
+    filter.addAction(Intent.ACTION_SCREEN_OFF);
+    filter.addAction(Intent.ACTION_USER_PRESENT);
+    mContext.registerReceiver(mScreenReceiver, filter);
+}
+
+public void stopScreenReceiverListener() {
+    mContext.unregisterReceiver(mScreenReceiver);
+}
+
+/**
+ * 监听sreen状态对外回调接口
+ */
+public interface SreenStateListener {
+    void onSreenOn();
+
+    void onSreenOff();
+
+    void onUserPresent();
+}
+
+public class SreenBroadcastReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        if (mStateReceiverListener == null) {
+            return;
+        }
+        if (Intent.ACTION_SCREEN_ON.equals(action)) { // 开屏
+            mStateReceiverListener.onSreenOn();
+        } else if (Intent.ACTION_SCREEN_OFF.equals(action)) { // 锁屏
+            mStateReceiverListener.onSreenOff();
+        } else if (Intent.ACTION_USER_PRESENT.equals(action)) { // 解锁
+            mStateReceiverListener.onUserPresent();
+        }
+    }
+}
+</code></pre><p>}<br><figure class="highlight clean"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- <span class="number">3</span>、对<span class="number">1</span>像素Activity进行防止内存泄露的处理，新建一个```ScreenManager```类</span><br></pre></td></tr></table></figure></p>
+<p>public class ScreenManager {<br>    private static final String TAG = ScreenManager.class.getSimpleName();<br>    private static ScreenManager sInstance;<br>    private Context mContext;<br>    private WeakReference<activity> mActivity;</activity></p>
+<pre><code>private ScreenManager(Context mContext) {
+    this.mContext = mContext;
+}
+
+public static ScreenManager getInstance(Context context) {
+    if (sInstance == null) {
+        sInstance = new ScreenManager(context);
+    }
+    return sInstance;
+}
+
+/** 获得SinglePixelActivity的引用
+ * @param activity
+ */
+public void setSingleActivity(Activity activity) {
+    mActivity = new WeakReference&lt;&gt;(activity);
+}
+
+/**
+ * 启动SinglePixelActivity
+ */
+public void startActivity() {
+    Intent intent = new Intent(mContext, SinglePixelActivity.class);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    mContext.startActivity(intent);
+}
+
+/**
+ * 结束SinglePixelActivity
+ */
+public void finishActivity() {
+    if (mActivity != null) {
+        Activity activity = mActivity.get();
+        if (activity != null) {
+            activity.finish();
+        }
+    }
+}
+</code></pre><p>}</p>
+<figure class="highlight clean"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- <span class="number">4</span>、对<span class="number">1</span>像素的Style进行特殊处理，在```style```文件中新建一个SingleActivityStyle</span><br></pre></td></tr></table></figure>
+<p><style name="SingleActivityStyle" parent="android:Theme.Holo.Light.NoActionBar"><br>        <item name="android:windowBackground">@android:color/transparent</item><br>        <item name="android:windowFrame">@null</item><br>        <item name="android:windowNoTitle">true</item><br>        <item name="android:windowIsFloating">true</item><br>        <item name="android:windowContentOverlay">@null</item><br>        <item name="android:backgroundDimEnabled">false</item><br>        <item name="android:windowAnimationStyle">@null</item><br>        <item name="android:windowDisablePreview">true</item><br>        <item name="android:windowNoDisplay">false</item><br><figure class="highlight clean"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- <span class="number">5</span>、让```SinglePixelActivity```使用singleInstance启动模式，在manifest文件中</span><br></pre></td></tr></table></figure></p>
+<p> <activity
+            android:name=".activity.SinglePixelActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="false"
+            android:launchMode="singleInstance"
+            android:theme="@style/SingleActivityStyle" /><br><figure class="highlight clean"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- <span class="number">6</span>、在保活服务类DownloadService中对监听的广播进行注册和对```SinglePixelActivity```进行控制。</span><br></pre></td></tr></table></figure></p>
+<p>public class DownloadService extends Service {<br>    public static final int NOTICE_ID = 100;<br>    private static final String TAG = DownloadService.class.getSimpleName();<br>    private DownloadBinder mDownloadBinder;<br>    private NotificationCompat.Builder mBuilderProgress;<br>    private NotificationManager mNotificationManager;</p>
+<pre><code>private ScreenReceiverUtil mScreenListener;
+private ScreenManager mScreenManager;
+private Timer mRunTimer;
+
+private int mTimeSec;
+private int mTimeMin;
+private int mTimeHour;
+
+private ScreenReceiverUtil.SreenStateListener mScreenListenerer = new ScreenReceiverUtil.SreenStateListener() {
+    @Override
+    public void onSreenOn() {
+        mScreenManager.finishActivity();
+        Logger.d(TAG, &quot;关闭了1像素Activity&quot;);
+    }
+
+    @Override
+    public void onSreenOff() {
+        mScreenManager.startActivity();
+        Logger.d(TAG, &quot;打开了1像素Activity&quot;);
+    }
+
+    @Override
+    public void onUserPresent() {
+    }
+};
+private OnTimeChangeListener mOnTimeChangeListener;
+
+@Override
+public void onCreate() {
+    super.onCreate();
+</code></pre><p>//        注册锁屏广播监听器<br>        mScreenListener = new ScreenReceiverUtil(this);<br>        mScreenManager = ScreenManager.getInstance(this);<br>        mScreenListener.setScreenReceiverListener(mScreenListenerer);</p>
+<pre><code>    mDownloadBinder = new DownloadBinder();
+    mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+}
+
+@Override
+public int onStartCommand(Intent intent, int flags, int startId) {
+    Logger.d(TAG, &quot;onStartCommand&quot;);
+    startRunTimer();
+    return START_STICKY;
+}
+
+@Nullable
+@Override
+public IBinder onBind(Intent intent) {
+
+    return mDownloadBinder;
+}
+
+@Override
+public boolean onUnbind(Intent intent) {
+    Logger.d(TAG, &quot;onUnbind&quot;);
+    return super.onUnbind(intent);
+}
+
+@Override
+public void onDestroy() {
+    super.onDestroy();
+    NotificationManager mManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    if (mManager == null) {
+        return;
+    }
+    mManager.cancel(NOTICE_ID);
+    stopRunTimer();
+</code></pre><p>//        mScreenListener.stopScreenReceiverListener();<br>    }</p>
+<pre><code>private void startRunTimer() {
+    TimerTask mTask = new TimerTask() {
+        @Override
+        public void run() {
+            mTimeSec++;
+            if (mTimeSec == 60) {
+                mTimeSec = 0;
+                mTimeMin++;
+            }
+            if (mTimeMin == 60) {
+                mTimeMin = 0;
+                mTimeHour++;
+            }
+            if (mTimeHour == 24) {
+                mTimeSec = 0;
+                mTimeMin = 0;
+                mTimeHour = 0;
+            }
+            String time = &quot;时间为：&quot; + mTimeHour + &quot; : &quot; + mTimeMin + &quot; : &quot; + mTimeSec;
+            if (mOnTimeChangeListener != null) {
+                mOnTimeChangeListener.showTime(time);
+            }
+            Logger.d(TAG, time);
+        }
+    };
+    mRunTimer = new Timer();
+    // 每隔1s更新一下时间
+    mRunTimer.schedule(mTask, 1000, 1000);
+}
+
+private void stopRunTimer() {
+    if (mRunTimer != null) {
+        mRunTimer.cancel();
+        mRunTimer = null;
+    }
+    mTimeSec = 0;
+    mTimeMin = 0;
+    mTimeHour = 0;
+    Logger.d(TAG, &quot;时间为：&quot; + mTimeHour + &quot; : &quot; + mTimeMin + &quot; : &quot; + mTimeSec);
+}
+
+public interface OnTimeChangeListener {
+    void showTime(String time);
+}
+
+public class DownloadBinder extends Binder {
+    public void setOnTimeChangeListener(OnTimeChangeListener onTimeChangeListener) {
+        mOnTimeChangeListener = onTimeChangeListener;
+    }
+}
+</code></pre><p>}</p>
+<hr>
+<figure class="highlight clean"><table><tr><td class="code"><pre><span class="line">###### <span class="number">3</span>、在后台播放音乐</span><br><span class="line"></span><br><span class="line">- <span class="number">1</span>、准备一段无声的音频，新建一个播放音乐的Service类，将播放模式改为无限循环播放。在其onDestroy方法中对自己重新启动。</span><br></pre></td></tr></table></figure>
+<p>public class PlayerMusicService extends Service {<br>    private final static String TAG = PlayerMusicService.class.getSimpleName();<br>    private MediaPlayer mMediaPlayer;</p>
+<pre><code>@Nullable
+@Override
+public IBinder onBind(Intent intent) {
+    return null;
+}
+
+@Override
+public void onCreate() {
+    super.onCreate();
+    Logger.d(TAG, TAG + &quot;----&gt;onCreate,启动服务&quot;);
+    mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.silent);
+    mMediaPlayer.setLooping(true);
+}
+
+@Override
+public int onStartCommand(Intent intent, int flags, int startId) {
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            startPlayMusic();
+        }
+    }).start();
+    return START_STICKY;
+}
+
+private void startPlayMusic() {
+    if (mMediaPlayer != null) {
+        Logger.d(TAG, &quot;启动后台播放音乐&quot;);
+        mMediaPlayer.start();
+    }
+}
+
+private void stopPlayMusic() {
+    if (mMediaPlayer != null) {
+        Logger.d(TAG, &quot;关闭后台播放音乐&quot;);
+        mMediaPlayer.stop();
+    }
+}
+
+@Override
+public void onDestroy() {
+    super.onDestroy();
+    stopPlayMusic();
+    Logger.d(TAG, TAG + &quot;----&gt;onCreate,停止服务&quot;);
+    // 重启自己
+    Intent intent = new Intent(getApplicationContext(), PlayerMusicService.class);
+    startService(intent);
+}
+</code></pre><p>}<br><figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="bullet">- </span>2、 在保活的DownloadServie服务类的onCreate方法中对PlayerMusicService进行启动</span><br></pre></td></tr></table></figure></p>
+<p> Intent intent = new Intent(this, PlayerMusicService.class);<br> startService(intent);<br><figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="bullet">- </span>3、在Manifest文件中进行注册</span><br></pre></td></tr></table></figure></p>
+<p>  <service
+            android:name=".service.PlayerMusicService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":music_service" /><br><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"></span><br><span class="line"><span class="comment">###### 4、使用JobScheduler唤醒Service</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> <span class="number">1</span><span class="string">、新建一个继承自JobService的ScheduleService类，在其onStartJob回调中对DownloadService进行存活的判断来重启。</span></span><br></pre></td></tr></table></figure></p>
+<p>public class ScheduleService extends JobService {<br>    private static final String TAG = ScheduleService.class.getSimpleName();</p>
+<pre><code>@Override
+public boolean onStartJob(JobParameters params) {
+
+    boolean isServiceRunning = ServiceAliveUtils.isServiceAlice();
+    if (!isServiceRunning) {
+        Intent i = new Intent(this, DownloadService.class);
+        startService(i);
+        Logger.d(TAG, &quot;ScheduleService启动了DownloadService&quot;);
+    }
+    jobFinished(params, false);
+    return false;
+}
+
+@Override
+public boolean onStopJob(JobParameters params) {
+    return false;
+}
+</code></pre><p>}<br><figure class="highlight lsl"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="number">2</span>、 在DownloadService服务类中进行JobScheduler的注册和使用</span><br></pre></td></tr></table></figure></p>
+<p> /**</p>
+<pre><code> * 使用JobScheduler进行保活
+ */
+private void useJobServiceForKeepAlive() {
+    JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+    if (jobScheduler == null) {
+        return;
+    }
+    jobScheduler.cancelAll();
+    JobInfo.Builder builder =
+        new JobInfo.Builder(1024, new ComponentName(getPackageName(), ScheduleService.class.getName()));
+    //周期设置为了2s
+    builder.setPeriodic(1000 * 2);
+    builder.setPersisted(true);
+    builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+    int schedule = jobScheduler.schedule(builder.build());
+    if (schedule &lt;= 0) {
+        Logger.w(TAG, &quot;schedule error！&quot;);
+    }
+}
+</code></pre><figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line"><span class="bullet">- </span>3、在manifest文件中进行权限设置</span><br></pre></td></tr></table></figure>
+<p> <service
+            android:name=".service.ScheduleService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" /><br><figure class="highlight lsl"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">## 关于推送类拉活</span><br><span class="line"></span><br><span class="line">根据华为官方文档集成HUAWEI Push</span><br><span class="line"></span><br><span class="line">- <span class="number">1</span>、华为畅玩<span class="number">5</span>X(<span class="number">6.0</span>)：APP全部进程被杀死时可以被拉起。</span><br><span class="line">- <span class="number">2</span>、华为nove <span class="number">3</span>e（<span class="number">8.0</span>)：APP全部进程被杀死时无法被拉起，能收到推送。</span><br><span class="line">- <span class="number">3</span>、华为荣耀<span class="number">10</span>（<span class="number">8.1</span>）：同<span class="number">2</span></span><br><span class="line"></span><br><span class="line">**结论：理论情况下，华为推送应该可以拉起华为机器才对，感觉是我没花钱的原因**</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">##### 补充：ServiceAliveUtils 类如下</span><br></pre></td></tr></table></figure></p>
+<p>public class ServiceAliveUtils {</p>
+<pre><code>public static boolean isServiceAlice() {
+    boolean isServiceRunning = false;
+    ActivityManager manager =
+        (ActivityManager) MyApplication.getMyApplication().getSystemService(Context.ACTIVITY_SERVICE);
+    if (manager == null) {
+        return true;
+    }
+    for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+        if (&quot;demo.lgm.com.keepalivedemo.service.DownloadService&quot;.equals(service.service.getClassName())) {
+            isServiceRunning = true;
+        }
+    }
+    return isServiceRunning;
+}
+</code></pre><p>}<br><code>`</code></p>
+</style></p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/20/Android性能优化之线程优化/" rel="next" title="Android性能优化之线程优化">
+                <i class="fa fa-chevron-left"></i> Android性能优化之线程优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/28/Android裁剪旋转CropView从入门到放弃/" rel="prev" title="Android裁剪旋转CropView从入门到放弃">
+                Android裁剪旋转CropView从入门到放弃 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="minminaya">
+            
+              <p class="site-author-name" itemprop="name">minminaya</p>
+              <p class="site-description motion-element" itemprop="description">啊！你来啦！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/minminaya" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:minminaya@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/43a04ef9d4c6" target="_blank" title="简书">
+                      
+                        <i class="fa fa-fw fa-book"></i>简书</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://developer.android.google.cn/index.html" title="Android Developers" target="_blank">Android Developers</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/XXApple/AndroidLibs" title="AndroidLibs" target="_blank">AndroidLibs</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/Freelander/Android_Data" title="Android学习资料" target="_blank">Android学习资料</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/justjavac/free-programming-books-zh_CN" title="Going Super Man" target="_blank">Going Super Man</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、常见保活方案"><span class="nav-number">1.</span> <span class="nav-text">一、常见保活方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、保活"><span class="nav-number">2.</span> <span class="nav-text">二、保活</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、复活"><span class="nav-number">3.</span> <span class="nav-text">三、复活</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#方案实现效果统计"><span class="nav-number"></span> <span class="nav-text">方案实现效果统计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、双进程守护方案（基于onStartCommand-return-START-STICKY）"><span class="nav-number">1.</span> <span class="nav-text">1、双进程守护方案（基于onStartCommand() return START_STICKY）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、监听锁屏广播打开1像素Activity（基于onStartCommand-return-START-STICKY）"><span class="nav-number">2.</span> <span class="nav-text">2、监听锁屏广播打开1像素Activity（基于onStartCommand() return START_STICKY）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、故意在后台播放无声的音乐（基于onStartCommand-return-START-STICKY）"><span class="nav-number">3.</span> <span class="nav-text">3、故意在后台播放无声的音乐（基于onStartCommand() return START_STICKY）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、使用JobScheduler唤醒Service（基于onStartCommand-return-START-STICKY）"><span class="nav-number">4.</span> <span class="nav-text">4、使用JobScheduler唤醒Service（基于onStartCommand() return START_STICKY）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5、混合使用的效果，并且在通知栏弹出通知"><span class="nav-number">5.</span> <span class="nav-text">5、混合使用的效果，并且在通知栏弹出通知</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现具体过程"><span class="nav-number"></span> <span class="nav-text">实现具体过程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#一、双进程实现方案"><span class="nav-number">0.0.1.</span> <span class="nav-text">一、双进程实现方案</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">minminaya</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+  <div class="footer-custom"><p>Hosted by <a href="https://pages.coding.me">Coding Pages</a></p></div>
+<div class="BbeiAn-info"">
+  冀ICP备 -
+  <a href="http://www.miitbeian.gov.cn/">16009379号-1</a>
+  
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'lzRI5E4EMXDN1jmh8qCNrXmt-gzGzoHsz',
+        appKey: 'SdCEwH2N4mmApxndtqBjBGwC',
+        placeholder: '来啊快活啊！Biu Biu Biu...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("lzRI5E4EMXDN1jmh8qCNrXmt-gzGzoHsz", "SdCEwH2N4mmApxndtqBjBGwC");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+
+
+  
+
+</body>
+</html>
